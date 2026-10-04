@@ -85,3 +85,20 @@ Não guarde tokens, senhas ou dados privados. Não marque validação de aparelh
 - Build portátil verde; testes/checks/CI finais no handoff `HO-20261003-lunet-code-first-safe-fixes`. Sem validação humana inventada.
 - #121 passou; #111 permanece review; reconciliador de governança separado, não repetir o teste ZIP.
 - Gate da Fase 3 aberto; próximo: CI/integração pelo integrador, APK direto e C6/J1/roteiro integral no aparelho.
+
+### 20261004-chatgpt-f3-candidate — ChatGPT → próximos agentes — review
+- Escopo LUNET-303/Issue #200: entrega do candidato 1000008 para roteiro integral da Fase 3, sem avançar fases ou implementar IPC.
+- PRs #116/#152 merged e aprovações #121/#155 verificadas; LUNET-301/302 reconciliadas para done preservando evidência humana.
+- Candidato inclui ambas as implementações por ancestralidade Git; APK/digest conferidos em metadados da release.
+- Objeto: docs/audits/fase-3-candidata.md; roteiro A–J e J1 ainda aguardam o proprietário. A validação integral passa a aparecer como crítica no portal, distinta de C6 e do gate P4-4.
+- Testes/checks da alteração e integração serão registrados no handoff; próximo passo: resultados por código, analisar J1, corrigir/retestar antes de concluir Fase 3.
+
+
+### 20261004-chatgpt-f3-closeout — 2026-10-04 — ChatGPT → próximos agentes — entregue
+- Responde a: 20261004-chatgpt-f3-candidate.
+- Item: LUNET-303 / fechamento da Fase 3 e liberação do Lunet como candidato a Product Shell do Ecosystem.
+- Base: `main` em `ed8bfe36c4d076ea20a2c9229805f83c27f10ff6`; validação humana integral aprovada pelo proprietário na Issue #204.
+- Trabalho: ROADMAP e auditoria da Fase 3 reconciliados; handoff LUNET-303 passa a `done`. Os tempos brutos de J1 não foram persistidos no formulário, então nenhuma métrica foi inventada e `PieceTable` permanece deliberadamente sem integração automática.
+- Verificação: evidência humana canônica #204; CI da mudança documental segue pelo PR Ecosystem #205. Nenhum código/runtime do Lunet foi alterado neste closeout.
+- Limite: a aprovação da Fase 3 não escolhe IPC, não concede grants e não integra Host API no Lunet. A decisão transversal está em DEC-0037/ADR-0027.
+- Próximo passo local do Lunet: Fase 4 está liberada pelo roadmap. Trabalho de Ecosystem P5-4 segue separado e não deve ser confundido com a Fase 4 do produto.
