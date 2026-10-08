@@ -178,10 +178,13 @@ Integração transversal autorizada pelo Ecosystem (não altera o gate de Framew
 - [x] **LUNET-403 — `Camera2D`** (§7): posição, zoom, rotação e toque/mundo integrados pelo PR #295; Issue #293 encerrada, APK 1000126 publicado e roteiro aprovado pelo proprietário no portal (Issue #304), registro no handoff `HO-20261008-lunet-camera`.
 - [~] **LUNET-404 — Animação de sprites e tweening** (§7, §23): clips, playback e transições sem alocação por quadro; Issue #298. APIs/guias integrados pelo PR #316 e publicados no APK 1000141; validação Android pendente. Handoff `HO-20261008-lunet-animation-api`. Modelo opcional na revisão consolidada #317 (zona ProjectStore, autorização do proprietário).
 - [~] **LUNET-405 — Partículas** (§7, §23): pool fixo, burst/emissão contínua, vida, velocidade, gravidade, tamanho e cor; Issue #306. APIs/guias integrados pelo PR #316 e publicados no APK 1000141; roteiro Android pendente. Handoff `HO-20261008-lunet-particles-api`. Modelo opcional na revisão consolidada #317 (zona ProjectStore, autorização do proprietário).
-- [ ] Tilemaps (carregar formato do Tile Studio, colisão).
+- [~] **LUNET-415 — Tilemaps em camadas, colisão e A*** (§7, §23): Issue #355; integrado pelo PR #358 com JSON v1, viewport, colisão AABB, camadas e A*. CI/consistency e compilação do APK aprovados; DEVICE pendente.
+- [~] **LUNET-416 — Camera2D viewport de mundo para tilemap culling** (§7, §23): Issue #363; AABB da vista conservadora com zoom/rotação, testes e guia offline em revisão; CI/DEVICE pendentes. Não conclui Tile Studio.
+- [ ] Tilemaps completos (conexão com formato definitivo do Tile Studio, colisão e validação em aparelho) — Fase 4 continua aberta.
 - [ ] Fontes personalizadas (bitmap e TrueType).
 - [~] **LUNET-408 — Fontes bitmap personalizadas** (§7, §23): imagem/atlas, métricas proporcionais e fallback Unicode em SpriteFont/DrawString; Issue #327; Integrado pelo PR #328 e publicado no APK 1000155; roteiro Android pendente. TrueType permanece pendente; não conclui o item completo de fontes.
 - [ ] UI (layout, âncoras, nine-slice, temas).
+- [~] **LUNET-417 — Temas imutáveis para UI** (§7, §23): Issue #365; paletas Dark/Light/HighContrast para TouchButton, TouchSlider e painéis/texto, testes de desenho e guia offline em revisão; CI/merge/DEVICE pendentes. Não conclui árvore de UI nem editor visual.
 - [~] **LUNET-410 — Botões de UI por toque e estilos de cores** (§7, §23): captura por dedo, clique ao soltar, cancelamento/disable e desenho pelo SpriteBatch; Issue #331. API e quinta página executável no Laboratório em revisão; integração/release e roteiro Android pendentes, sem árvore de UI, foco ou temas completos.
 
 - [~] **LUNET-409 — Layout de UI por âncoras e margens** (§7, §23): LayoutRect/Fixed/Stretch e composição aninhada sem alocação; Issue #329; Integrado pelo PR #330 e publicado no APK 1000164; roteiro Android pendente. Incremento de UI; temas e controles completos permanecem pendentes.
@@ -192,6 +195,7 @@ Integração transversal autorizada pelo Ecosystem (não altera o gate de Framew
 - [~] **LUNET-412 — Scene2D opcional e API entidade/componente** (§7, §23): Issue #338; ownership exclusivo, ordem de inserção e percursos sem alocação. Demonstração pronta na página 6 do Laboratório; integrado pelo PR #339 e publicado no APK 1000169, suíte 475/475 e CI verdes; DEVICE pendente. Sem obrigar ECS.
 - [~] **LUNET-413 — Debug APIs e helpers** (§7, §23): polígonos, raios, eixos de transformação e grades limitadas; Issue #340. Demonstração pronta na página 7 do Laboratório; build sem warnings/errors, 485/485 testes; integração/release e DEVICE pendentes.
 - [ ] Profiler básico do framework (FPS, frame time, update/render time, draw calls, triângulos, memória, GC, audio underruns) (§23), com o painel Profiler no workspace (movido da Fase 3).
+- [~] **LUNET-418 — Laboratório 2.0, central de validação offline** (§7, §23): Issue #367, PR #368; índice com doze módulos, navegação e visual unificado, legado preservado e demos de animações, partículas, tilemaps/A*, SAT, fontes, nine-slice e UiTheme oficial. Aguardando CI combinado, integração/release e DEVICE, sem alterar ProjectStore nem projetos existentes.
 - [ ] Auditoria de fechamento da Fase 4 registrada em `docs/audits/`.
 
 ## Fase 5 — Lunet Studio (§13)
