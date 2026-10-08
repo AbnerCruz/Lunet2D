@@ -6368,6 +6368,90 @@
       ]
     },
     {
+      "id": "T:Lunet.Graphics.BitmapGlyph",
+      "name": "BitmapGlyph",
+      "namespace": "Lunet.Graphics",
+      "kind": "struct",
+      "signature": "public readonly struct BitmapGlyph",
+      "summary": "Regi\u00E3o e m\u00E9tricas de uma letra, s\u00EDmbolo ou espa\u00E7o em uma fonte bitmap.",
+      "remarks": "Source \u00E9 validado contra a textura em SpriteFont.FromBitmap. default representa um glifo invis\u00EDvel sem avan\u00E7o.",
+      "examples": [
+        "\u0060\u0060\u0060\nvar glyph = new BitmapGlyph(new RectangleF(0, 0, 6, 10), 8, new Vector2(1, 2));\n\u0060\u0060\u0060"
+      ],
+      "related": [],
+      "since": "0.0.1",
+      "members": [
+        {
+          "id": "M:Lunet.Graphics.BitmapGlyph.#ctor(Lunet.RectangleF,System.Single,System.Numerics.Vector2)",
+          "name": "BitmapGlyph",
+          "kind": "constructor",
+          "signature": "public BitmapGlyph(RectangleF source, float advance, Vector2 offset = null)",
+          "summary": "Define a imagem e o avan\u00E7o horizontal do glifo.",
+          "remarks": "",
+          "parameters": [
+            {
+              "name": "source",
+              "type": "RectangleF",
+              "description": "Regi\u00E3o em pixels; tamanho 0\u00D70 representa espa\u00E7o sem desenho."
+            },
+            {
+              "name": "advance",
+              "type": "float",
+              "description": "Deslocamento horizontal finito e n\u00E3o negativo at\u00E9 o pr\u00F3ximo glifo."
+            },
+            {
+              "name": "offset",
+              "type": "Vector2",
+              "description": "Deslocamento finito da imagem em rela\u00E7\u00E3o ao cursor; pode ser negativo."
+            }
+          ],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.Graphics.BitmapGlyph.Advance",
+          "name": "Advance",
+          "kind": "property",
+          "signature": "public float Advance { get; }",
+          "summary": "Avan\u00E7o horizontal em unidades da fonte; zero permite marcas sobrepostas.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.Graphics.BitmapGlyph.Offset",
+          "name": "Offset",
+          "kind": "property",
+          "signature": "public Vector2 Offset { get; }",
+          "summary": "Deslocamento da imagem a partir do cursor da linha.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.Graphics.BitmapGlyph.Source",
+          "name": "Source",
+          "kind": "property",
+          "signature": "public RectangleF Source { get; }",
+          "summary": "Recorte em pixels da textura.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        }
+      ]
+    },
+    {
       "id": "T:Lunet.Graphics.BlendMode",
       "name": "BlendMode",
       "namespace": "Lunet.Graphics",
@@ -6949,6 +7033,63 @@
       "since": "0.0.1",
       "members": [
         {
+          "id": "F:Lunet.Graphics.DebugDraw.MaxDebugSegments",
+          "name": "MaxDebugSegments",
+          "kind": "field",
+          "signature": "public const int MaxDebugSegments = 4096",
+          "summary": "Limite de linhas por grade e de v\u00E9rtices por pol\u00EDgono de depura\u00E7\u00E3o.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "M:Lunet.Graphics.DebugDraw.Axes(Lunet.Graphics.SpriteBatch,Lunet.Transform2D,System.Single,Lunet.Graphics.Color,Lunet.Graphics.Color,System.Single)",
+          "name": "Axes",
+          "kind": "method",
+          "signature": "public static void Axes(SpriteBatch batch, Transform2D transform, float length, Color xColor, Color yColor, float thickness = 1f)",
+          "summary": "Desenha eixos X/Y no piv\u00F4 mundial do transform; respeita rota\u00E7\u00E3o, escala e reflex\u00E3o.",
+          "remarks": "Eixos partem de Transform.Position (piv\u00F4), n\u00E3o do ponto local zero deslocado por Origin.",
+          "parameters": [
+            {
+              "name": "batch",
+              "type": "SpriteBatch",
+              "description": "Lote entre Begin/End."
+            },
+            {
+              "name": "transform",
+              "type": "Transform2D",
+              "description": "Transform com posi\u00E7\u00E3o, origem, rota\u00E7\u00E3o e escala finitas."
+            },
+            {
+              "name": "length",
+              "type": "float",
+              "description": "Comprimento local positivo e finito; escala zero colapsa o respectivo eixo."
+            },
+            {
+              "name": "xColor",
+              "type": "Color",
+              "description": "Cor do eixo X."
+            },
+            {
+              "name": "yColor",
+              "type": "Color",
+              "description": "Cor do eixo Y."
+            },
+            {
+              "name": "thickness",
+              "type": "float",
+              "description": "Espessura positiva e finita."
+            }
+          ],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
           "id": "M:Lunet.Graphics.DebugDraw.Circle(Lunet.Graphics.SpriteBatch,System.Numerics.Vector2,System.Single,Lunet.Graphics.Color,System.Single,System.Int32)",
           "name": "Circle",
           "kind": "method",
@@ -7061,6 +7202,45 @@
           "since": "0.0.1"
         },
         {
+          "id": "M:Lunet.Graphics.DebugDraw.Grid(Lunet.Graphics.SpriteBatch,Lunet.RectangleF,System.Numerics.Vector2,Lunet.Graphics.Color,System.Single)",
+          "name": "Grid",
+          "kind": "method",
+          "signature": "public static void Grid(SpriteBatch batch, RectangleF area, Vector2 spacing, Color color, float thickness = 1f)",
+          "summary": "Desenha grade limitada \u00E0 \u00E1rea, incluindo bordas, sem alocar. Origem \u00E9 o canto da \u00E1rea.",
+          "remarks": "Rejeita mais de 4096 linhas antes de desenhar. Bordas n\u00E3o s\u00E3o repetidas quando coincidem com a grade. N\u00E3o recorta outros desenhos.",
+          "parameters": [
+            {
+              "name": "batch",
+              "type": "SpriteBatch",
+              "description": "Lote entre Begin/End."
+            },
+            {
+              "name": "area",
+              "type": "RectangleF",
+              "description": "Ret\u00E2ngulo finito com dimens\u00F5es n\u00E3o negativas; \u00E1rea zero n\u00E3o desenha."
+            },
+            {
+              "name": "spacing",
+              "type": "Vector2",
+              "description": "Passo X/Y positivo e finito."
+            },
+            {
+              "name": "color",
+              "type": "Color",
+              "description": "Cor das linhas."
+            },
+            {
+              "name": "thickness",
+              "type": "float",
+              "description": "Espessura positiva e finita."
+            }
+          ],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
           "id": "M:Lunet.Graphics.DebugDraw.Line(Lunet.Graphics.SpriteBatch,System.Numerics.Vector2,System.Numerics.Vector2,Lunet.Graphics.Color,System.Single)",
           "name": "Line",
           "kind": "method",
@@ -7092,6 +7272,89 @@
               "name": "thickness",
               "type": "float",
               "description": "Espessura."
+            }
+          ],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "M:Lunet.Graphics.DebugDraw.Polygon(Lunet.Graphics.SpriteBatch,System.ReadOnlySpan{System.Numerics.Vector2},Lunet.Graphics.Color,System.Boolean,System.Single,System.Nullable{System.Numerics.Matrix3x2})",
+          "name": "Polygon",
+          "kind": "method",
+          "signature": "public static void Polygon(SpriteBatch batch, ReadOnlySpan\u003CVector2\u003E vertices, Color color, bool closed = true, float thickness = 1f, Matrix3x2? transform = null)",
+          "summary": "Desenha contorno fechado ou polilinha, sem preencher nem alocar.",
+          "remarks": "Valida toda a geometria antes de desenhar. Aceita formas c\u00F4ncavas; n\u00E3o calcula colis\u00E3o, preenchimento ou triangula\u00E7\u00E3o.",
+          "parameters": [
+            {
+              "name": "batch",
+              "type": "SpriteBatch",
+              "description": "Lote entre Begin/End; c\u00E2mera e clipping existentes s\u00E3o preservados."
+            },
+            {
+              "name": "vertices",
+              "type": "ReadOnlySpan\u003CVector2\u003E",
+              "description": "Pontos locais; m\u00EDnimo tr\u00EAs se fechado, dois se aberto, m\u00E1ximo 4096."
+            },
+            {
+              "name": "color",
+              "type": "Color",
+              "description": "Cor do contorno."
+            },
+            {
+              "name": "closed",
+              "type": "bool",
+              "description": "Liga o \u00FAltimo ponto ao primeiro quando true."
+            },
+            {
+              "name": "thickness",
+              "type": "float",
+              "description": "Espessura positiva e finita."
+            },
+            {
+              "name": "transform",
+              "type": "Matrix3x2?",
+              "description": "Matriz local\u2192mundo opcional; null usa identidade."
+            }
+          ],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "M:Lunet.Graphics.DebugDraw.Ray(Lunet.Graphics.SpriteBatch,Lunet.Ray2D,System.Single,Lunet.Graphics.Color,System.Single)",
+          "name": "Ray",
+          "kind": "method",
+          "signature": "public static void Ray(SpriteBatch batch, Ray2D ray, float length, Color color, float thickness = 1f)",
+          "summary": "Desenha trecho de um Ray2D de comprimento expl\u00EDcito, sem alocar.",
+          "remarks": "",
+          "parameters": [
+            {
+              "name": "batch",
+              "type": "SpriteBatch",
+              "description": "Lote entre Begin/End."
+            },
+            {
+              "name": "ray",
+              "type": "Ray2D",
+              "description": "Raio com origem/dire\u00E7\u00E3o finitas e dire\u00E7\u00E3o unit\u00E1ria; default \u00E9 rejeitado."
+            },
+            {
+              "name": "length",
+              "type": "float",
+              "description": "Dist\u00E2ncia n\u00E3o negativa e finita; zero n\u00E3o desenha."
+            },
+            {
+              "name": "color",
+              "type": "Color",
+              "description": "Cor da linha."
+            },
+            {
+              "name": "thickness",
+              "type": "float",
+              "description": "Espessura positiva e finita."
             }
           ],
           "returns": "",
@@ -8002,6 +8265,144 @@
           "kind": "property",
           "signature": "public Shader? Shader { get; set; }",
           "summary": "Shader de fragmento, ou nulo para o padr\u00E3o.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        }
+      ]
+    },
+    {
+      "id": "T:Lunet.Graphics.NineSlice",
+      "name": "NineSlice",
+      "namespace": "Lunet.Graphics",
+      "kind": "class",
+      "signature": "public sealed class NineSlice",
+      "summary": "Regi\u00E3o de textura dividida em nove partes para redimensionar pain\u00E9is preservando os cantos.",
+      "remarks": "Imut\u00E1vel; n\u00E3o possui nem libera a textura. Centro e bordas esticam, sem repeti\u00E7\u00E3o. N\u00E3o calcula layout, padding de conte\u00FAdo ou hit testing.",
+      "examples": [
+        "\u0060\u0060\u0060\nvar panel = new NineSlice(texture, new RectangleF(0, 0, 24, 24), 6, 6, 6, 6);\nbatch.Begin();\nbatch.Draw(panel, new RectangleF(20, 40, 200, 80), Color.White);\nbatch.End();\n\u0060\u0060\u0060"
+      ],
+      "related": [],
+      "since": "0.0.1",
+      "members": [
+        {
+          "id": "M:Lunet.Graphics.NineSlice.#ctor(Lunet.Graphics.Texture2D,Lunet.RectangleF,System.Single,System.Single,System.Single,System.Single)",
+          "name": "NineSlice",
+          "kind": "constructor",
+          "signature": "public NineSlice(Texture2D texture, RectangleF source, float left, float top, float right, float bottom)",
+          "summary": "Define a regi\u00E3o e as bordas em pixels da imagem.",
+          "remarks": "As somas das bordas devem deixar um centro com largura e altura positivas.",
+          "parameters": [
+            {
+              "name": "texture",
+              "type": "Texture2D",
+              "description": "Textura viva, mantida pelo jogo."
+            },
+            {
+              "name": "source",
+              "type": "RectangleF",
+              "description": "Regi\u00E3o positiva e finita dentro da textura, inclusive em atlas."
+            },
+            {
+              "name": "left",
+              "type": "float",
+              "description": "Largura n\u00E3o negativa da borda esquerda."
+            },
+            {
+              "name": "top",
+              "type": "float",
+              "description": "Altura n\u00E3o negativa da borda superior."
+            },
+            {
+              "name": "right",
+              "type": "float",
+              "description": "Largura n\u00E3o negativa da borda direita."
+            },
+            {
+              "name": "bottom",
+              "type": "float",
+              "description": "Altura n\u00E3o negativa da borda inferior."
+            }
+          ],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.Graphics.NineSlice.Bottom",
+          "name": "Bottom",
+          "kind": "property",
+          "signature": "public float Bottom { get; }",
+          "summary": "Borda inferior em pixels da imagem.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.Graphics.NineSlice.Left",
+          "name": "Left",
+          "kind": "property",
+          "signature": "public float Left { get; }",
+          "summary": "Borda esquerda em pixels da imagem.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.Graphics.NineSlice.Right",
+          "name": "Right",
+          "kind": "property",
+          "signature": "public float Right { get; }",
+          "summary": "Borda direita em pixels da imagem.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.Graphics.NineSlice.Source",
+          "name": "Source",
+          "kind": "property",
+          "signature": "public RectangleF Source { get; }",
+          "summary": "Regi\u00E3o em pixels da textura.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.Graphics.NineSlice.Texture",
+          "name": "Texture",
+          "kind": "property",
+          "signature": "public Texture2D Texture { get; }",
+          "summary": "Textura compartilhada; o jogo controla sua vida.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.Graphics.NineSlice.Top",
+          "name": "Top",
+          "kind": "property",
+          "signature": "public float Top { get; }",
+          "summary": "Borda superior em pixels da imagem.",
           "remarks": "",
           "parameters": [],
           "returns": "",
@@ -9849,6 +10250,40 @@
           "since": "0.0.1"
         },
         {
+          "id": "M:Lunet.Graphics.SpriteBatch.Draw(Lunet.Graphics.NineSlice,Lunet.RectangleF,Lunet.Graphics.Color,System.Single)",
+          "name": "Draw",
+          "kind": "method",
+          "signature": "public void Draw(NineSlice slice, RectangleF destination, Color color, float borderScale = 1f)",
+          "summary": "Desenha um painel nine-slice, sem aloca\u00E7\u00E3o, no lote atual.",
+          "remarks": "Se o destino for menor que a soma das bordas, comprime-as proporcionalmente por eixo e elimina o centro nesse eixo. Usa c\u00E2mera, clip, blend e sampler do lote; at\u00E9 nove quads.",
+          "parameters": [
+            {
+              "name": "slice",
+              "type": "NineSlice",
+              "description": "Regi\u00E3o e bordas da textura."
+            },
+            {
+              "name": "destination",
+              "type": "RectangleF",
+              "description": "Destino finito com tamanho n\u00E3o negativo; tamanho zero n\u00E3o desenha."
+            },
+            {
+              "name": "color",
+              "type": "Color",
+              "description": "Cor multiplicada em todas as partes."
+            },
+            {
+              "name": "borderScale",
+              "type": "float",
+              "description": "Escala positiva e finita das bordas; 1 preserva pixels da imagem."
+            }
+          ],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
           "id": "M:Lunet.Graphics.SpriteBatch.Draw(Lunet.Graphics.TextureAtlas,System.String,System.Numerics.Vector2,Lunet.Graphics.Color,System.Single,System.Single)",
           "name": "Draw",
           "kind": "method",
@@ -9976,7 +10411,7 @@
       "namespace": "Lunet.Graphics",
       "kind": "class",
       "signature": "public sealed class SpriteFont",
-      "summary": "Fonte bitmap embutida (5\u00D77 pixels, com acentos do portugu\u00EAs). Serve para HUD e depura\u00E7\u00E3o; fontes TrueType/bitmap personalizadas vir\u00E3o depois.",
+      "summary": "Fonte bitmap embutida (5\u00D77 pixels, com acentos do portugu\u00EAs). Serve para HUD e depura\u00E7\u00E3o; SpriteFont.FromBitmap aceita fontes personalizadas; TrueType permanece separado.",
       "remarks": "",
       "examples": [
         "\u0060\u0060\u0060\nvar title = SpriteFont.CreateDefault(device);\nVector2 size = title.Measure(\u0022Ol\u00E1\u0022, 2f);\nbatch.DrawString(title, \u0022Ol\u00E1\u0022, (device.ViewSize - size) / 2, Color.White, 2f);\n\u0060\u0060\u0060"
@@ -10017,11 +10452,45 @@
           "since": "0.0.1"
         },
         {
+          "id": "M:Lunet.Graphics.SpriteFont.FromBitmap(Lunet.Graphics.Texture2D,System.Collections.Generic.IReadOnlyDictionary{System.Int32,Lunet.Graphics.BitmapGlyph},System.Int32,System.Int32)",
+          "name": "FromBitmap",
+          "kind": "method",
+          "signature": "public static SpriteFont FromBitmap(Texture2D texture, IReadOnlyDictionary\u003Cint, BitmapGlyph\u003E glyphs, int lineHeight, int fallbackCodePoint = 63)",
+          "summary": "Cria uma fonte bitmap personalizada copiando o mapa de glifos.",
+          "remarks": "N\u00E3o libera a textura. Glifos podem sobrepor/ultrapassar a linha por Offset; Measure informa avan\u00E7o e passo de linhas, n\u00E3o o contorno da tinta. Sem kerning, shaping ou rasteriza\u00E7\u00E3o TrueType.",
+          "parameters": [
+            {
+              "name": "texture",
+              "type": "Texture2D",
+              "description": "Imagem/atlas compartilhado; o jogo ou ContentManager controla sua vida."
+            },
+            {
+              "name": "glyphs",
+              "type": "IReadOnlyDictionary\u003Cint, BitmapGlyph\u003E",
+              "description": "Mapa de escalares Unicode (inteiros, n\u00E3o \u00EDndices UTF-16) para recortes e m\u00E9tricas."
+            },
+            {
+              "name": "lineHeight",
+              "type": "int",
+              "description": "Passo vertical positivo entre linhas, em unidades da fonte."
+            },
+            {
+              "name": "fallbackCodePoint",
+              "type": "int",
+              "description": "C\u00F3digo presente no mapa usado para caracteres ausentes; padr\u00E3o \u0027?\u0027."
+            }
+          ],
+          "returns": "Fonte imut\u00E1vel pronta para Measure e SpriteBatch.DrawString.",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
           "id": "M:Lunet.Graphics.SpriteFont.Measure(System.String,System.Single)",
           "name": "Measure",
           "kind": "method",
           "signature": "public Vector2 Measure(string text, float scale = 1f)",
-          "summary": "Tamanho do texto em pixels virtuais para a escala dada.",
+          "summary": "Tamanho de layout do texto para a escala dada; em fontes personalizadas usa avan\u00E7os e passo de linhas.",
           "remarks": "",
           "parameters": [
             {
@@ -13677,6 +14146,436 @@
       ]
     },
     {
+      "id": "T:Lunet.Scenes.Component2D",
+      "name": "Component2D",
+      "namespace": "Lunet.Scenes",
+      "kind": "class",
+      "signature": "public abstract class Component2D",
+      "summary": "Comportamento opcional implementado pelo jogo. Recursos e descarte pertencem ao jogo.",
+      "remarks": "",
+      "examples": [
+        "\u0060\u0060\u0060\nvar entity = new Lunet.Scenes.Entity2D();\nLunet.Scenes.Component2D? first = entity.Get\u003CLunet.Scenes.Component2D\u003E();\nbool absent = first is null;\n\u0060\u0060\u0060"
+      ],
+      "related": [],
+      "since": "0.0.1",
+      "members": [
+        {
+          "id": "P:Lunet.Scenes.Component2D.Entity",
+          "name": "Entity",
+          "kind": "property",
+          "signature": "public Entity2D? Entity { get; }",
+          "summary": "Entidade atual; null quando desanexado.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.Scenes.Component2D.IsEnabled",
+          "name": "IsEnabled",
+          "kind": "property",
+          "signature": "public bool IsEnabled { get; set; }",
+          "summary": "Permite receber Update.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.Scenes.Component2D.IsVisible",
+          "name": "IsVisible",
+          "kind": "property",
+          "signature": "public bool IsVisible { get; set; }",
+          "summary": "Permite receber Draw, independentemente de IsEnabled.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "M:Lunet.Scenes.Component2D.Draw(Lunet.Graphics.SpriteBatch,Lunet.GameTime)",
+          "name": "Draw",
+          "kind": "method",
+          "signature": "public virtual void Draw(SpriteBatch batch, GameTime time)",
+          "summary": "Desenha dentro do Begin/End controlado pelo jogo.",
+          "remarks": "",
+          "parameters": [
+            {
+              "name": "batch",
+              "type": "SpriteBatch",
+              "description": "Lote preparado pelo jogo."
+            },
+            {
+              "name": "time",
+              "type": "GameTime",
+              "description": "Tempo do desenho fornecido pela cena."
+            }
+          ],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "M:Lunet.Scenes.Component2D.Update(Lunet.GameTime)",
+          "name": "Update",
+          "kind": "method",
+          "signature": "public virtual void Update(GameTime time)",
+          "summary": "Atualiza comportamento. Mudan\u00E7as estruturais devem ocorrer fora do percurso.",
+          "remarks": "",
+          "parameters": [
+            {
+              "name": "time",
+              "type": "GameTime",
+              "description": "Tempo do passo fornecido pela cena."
+            }
+          ],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        }
+      ]
+    },
+    {
+      "id": "T:Lunet.Scenes.Entity2D",
+      "name": "Entity2D",
+      "namespace": "Lunet.Scenes",
+      "kind": "class",
+      "signature": "public sealed class Entity2D",
+      "summary": "Entidade opcional com transform e componentes pr\u00F3prios, sem hierarquia impl\u00EDcita.",
+      "remarks": "Componentes s\u00E3o preservados ao remover a entidade da cena. Sem identidade persistente ou serializa\u00E7\u00E3o.",
+      "examples": [
+        "\u0060\u0060\u0060\nvar entity = new Lunet.Scenes.Entity2D();\nentity.Transform.Position = new System.Numerics.Vector2(50, 100);\nvar scene = new Lunet.Scenes.Scene2D(); scene.Add(entity);\n\u0060\u0060\u0060"
+      ],
+      "related": [],
+      "since": "0.0.1",
+      "members": [
+        {
+          "id": "F:Lunet.Scenes.Entity2D.Transform",
+          "name": "Transform",
+          "kind": "field",
+          "signature": "public Transform2D Transform",
+          "summary": "Transform livre do jogo; componentes decidem como utiliz\u00E1-lo.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.Scenes.Entity2D.Count",
+          "name": "Count",
+          "kind": "property",
+          "signature": "public int Count { get; }",
+          "summary": "Quantidade de componentes anexados.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.Scenes.Entity2D.IsEnabled",
+          "name": "IsEnabled",
+          "kind": "property",
+          "signature": "public bool IsEnabled { get; set; }",
+          "summary": "Permite atualiza\u00E7\u00E3o dos componentes.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.Scenes.Entity2D.IsVisible",
+          "name": "IsVisible",
+          "kind": "property",
+          "signature": "public bool IsVisible { get; set; }",
+          "summary": "Permite desenho dos componentes, independentemente de IsEnabled.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.Scenes.Entity2D.Item(System.Int32)",
+          "name": "Item",
+          "kind": "property",
+          "signature": "public Component2D this[int index] { get; }",
+          "summary": "Componente na ordem de inser\u00E7\u00E3o.",
+          "remarks": "",
+          "parameters": [
+            {
+              "name": "index",
+              "type": "int",
+              "description": "\u00CDndice zero-based do componente."
+            }
+          ],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.Scenes.Entity2D.Scene",
+          "name": "Scene",
+          "kind": "property",
+          "signature": "public Scene2D? Scene { get; }",
+          "summary": "Cena atual; null quando desanexada.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "M:Lunet.Scenes.Entity2D.Add(Lunet.Scenes.Component2D)",
+          "name": "Add",
+          "kind": "method",
+          "signature": "public void Add(Component2D component)",
+          "summary": "Anexa componente sem entidade; rejeita null/duplicata/ownership concorrente.",
+          "remarks": "",
+          "parameters": [
+            {
+              "name": "component",
+              "type": "Component2D",
+              "description": "Componente desanexado a adicionar."
+            }
+          ],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "M:Lunet.Scenes.Entity2D.Clear",
+          "name": "Clear",
+          "kind": "method",
+          "signature": "public void Clear()",
+          "summary": "Desanexa todos os componentes sem descart\u00E1-los.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "M:Lunet.Scenes.Entity2D.Get\u0060\u00601",
+          "name": "Get",
+          "kind": "method",
+          "signature": "public T Get\u003CT\u003E()",
+          "summary": "Primeiro componente do tipo solicitado (inclui derivados); null se ausente.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "Primeiro componente compat\u00EDvel; null se ausente.",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "M:Lunet.Scenes.Entity2D.Remove(Lunet.Scenes.Component2D)",
+          "name": "Remove",
+          "kind": "method",
+          "signature": "public bool Remove(Component2D component)",
+          "summary": "Desanexa sem descartar recursos; falso se o componente n\u00E3o pertence \u00E0 entidade.",
+          "remarks": "",
+          "parameters": [
+            {
+              "name": "component",
+              "type": "Component2D",
+              "description": "Componente a desanexar."
+            }
+          ],
+          "returns": "True quando removido; false quando n\u00E3o pertence \u00E0 entidade.",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        }
+      ]
+    },
+    {
+      "id": "T:Lunet.Scenes.Scene2D",
+      "name": "Scene2D",
+      "namespace": "Lunet.Scenes",
+      "kind": "class",
+      "signature": "public sealed class Scene2D",
+      "summary": "Organiza\u00E7\u00E3o opcional de entidades de um jogo, em ordem de inser\u00E7\u00E3o.",
+      "remarks": "Chame Update/Draw explicitamente no Game. N\u00E3o h\u00E1 ECS obrigat\u00F3rio, serializa\u00E7\u00E3o, hierarquia, propriedade de recursos gr\u00E1ficos ou callbacks de attach/dispose. A API \u00E9 da thread do jogo. Add/Remove/Clear (inclusive de componentes) s\u00E3o proibidos durante um percurso desta cena; fa\u00E7a mudan\u00E7as estruturais antes/depois. Flags e transforms podem mudar dentro dos callbacks. Exce\u00E7\u00F5es propagam ao host; o bloqueio \u00E9 liberado, sem rollback dos callbacks j\u00E1 executados.",
+      "examples": [
+        "\u0060\u0060\u0060\nvar scene = new Lunet.Scenes.Scene2D();\nvar player = new Lunet.Scenes.Entity2D();\nscene.Add(player);\nscene.Update(time);\nbatch.Begin(); scene.Draw(batch, time); batch.End();\n\u0060\u0060\u0060"
+      ],
+      "related": [],
+      "since": "0.0.1",
+      "members": [
+        {
+          "id": "P:Lunet.Scenes.Scene2D.Count",
+          "name": "Count",
+          "kind": "property",
+          "signature": "public int Count { get; }",
+          "summary": "N\u00FAmero de entidades, inclusive desabilitadas/invis\u00EDveis.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.Scenes.Scene2D.IsEnabled",
+          "name": "IsEnabled",
+          "kind": "property",
+          "signature": "public bool IsEnabled { get; set; }",
+          "summary": "Permite atualiza\u00E7\u00E3o. Desligar durante um callback interrompe o percurso restante.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.Scenes.Scene2D.IsVisible",
+          "name": "IsVisible",
+          "kind": "property",
+          "signature": "public bool IsVisible { get; set; }",
+          "summary": "Permite desenho. Desligar durante um callback interrompe o percurso restante.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.Scenes.Scene2D.Item(System.Int32)",
+          "name": "Item",
+          "kind": "property",
+          "signature": "public Entity2D this[int index] { get; }",
+          "summary": "Entidade no \u00EDndice de inser\u00E7\u00E3o; acesso inv\u00E1lido lan\u00E7a exce\u00E7\u00E3o.",
+          "remarks": "",
+          "parameters": [
+            {
+              "name": "index",
+              "type": "int",
+              "description": "\u00CDndice zero-based da entidade."
+            }
+          ],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "M:Lunet.Scenes.Scene2D.Add(Lunet.Scenes.Entity2D)",
+          "name": "Add",
+          "kind": "method",
+          "signature": "public void Add(Entity2D entity)",
+          "summary": "Adiciona uma entidade sem cena. Rejeita null, duplicata e ownership concorrente.",
+          "remarks": "",
+          "parameters": [
+            {
+              "name": "entity",
+              "type": "Entity2D",
+              "description": "Entidade desanexada a adicionar."
+            }
+          ],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "M:Lunet.Scenes.Scene2D.Clear",
+          "name": "Clear",
+          "kind": "method",
+          "signature": "public void Clear()",
+          "summary": "Desanexa todas as entidades, preservando componentes e recursos do jogo.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "M:Lunet.Scenes.Scene2D.Draw(Lunet.Graphics.SpriteBatch,Lunet.GameTime)",
+          "name": "Draw",
+          "kind": "method",
+          "signature": "public void Draw(SpriteBatch batch, GameTime time)",
+          "summary": "Desenha entidades/componentes vis\u00EDveis em ordem de inser\u00E7\u00E3o; n\u00E3o aloca.",
+          "remarks": "O jogo controla Begin/End, c\u00E2mera, blend e clipping do SpriteBatch. IsEnabled n\u00E3o oculta.",
+          "parameters": [
+            {
+              "name": "batch",
+              "type": "SpriteBatch",
+              "description": "Lote preparado pelo jogo."
+            },
+            {
+              "name": "time",
+              "type": "GameTime",
+              "description": "Tempo do desenho fornecido pelo jogo."
+            }
+          ],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "M:Lunet.Scenes.Scene2D.Remove(Lunet.Scenes.Entity2D)",
+          "name": "Remove",
+          "kind": "method",
+          "signature": "public bool Remove(Entity2D entity)",
+          "summary": "Remove sem descartar recursos ou componentes. Retorna falso se n\u00E3o pertence \u00E0 cena.",
+          "remarks": "",
+          "parameters": [
+            {
+              "name": "entity",
+              "type": "Entity2D",
+              "description": "Entidade a desanexar."
+            }
+          ],
+          "returns": "True quando removida; false quando n\u00E3o pertence \u00E0 cena.",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "M:Lunet.Scenes.Scene2D.Update(Lunet.GameTime)",
+          "name": "Update",
+          "kind": "method",
+          "signature": "public void Update(GameTime time)",
+          "summary": "Atualiza entidades/componentes habilitados em ordem de inser\u00E7\u00E3o; n\u00E3o aloca.",
+          "remarks": "",
+          "parameters": [
+            {
+              "name": "time",
+              "type": "GameTime",
+              "description": "Tempo do passo fornecido pelo jogo."
+            }
+          ],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        }
+      ]
+    },
+    {
       "id": "T:Lunet.Storage.DirectorySaveStore",
       "name": "DirectorySaveStore",
       "namespace": "Lunet.Storage",
@@ -14102,6 +15001,927 @@
               "description": "Objeto a salvar (campos e propriedades p\u00FAblicos)."
             }
           ],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        }
+      ]
+    },
+    {
+      "id": "T:Lunet.UI.LayoutRect",
+      "name": "LayoutRect",
+      "namespace": "Lunet.UI",
+      "kind": "struct",
+      "signature": "public readonly struct LayoutRect",
+      "summary": "Layout de um ret\u00E2ngulo por \u00E2ncoras normalizadas e offsets no espa\u00E7o do pai.",
+      "remarks": "Imut\u00E1vel e sem aloca\u00E7\u00E3o por c\u00E1lculo. Retorna geometria para desenhar e testar toque; n\u00E3o possui filhos, eventos, texto, recorte ou temas. default \u00E9 um ret\u00E2ngulo zero no canto superior esquerdo do pai.",
+      "examples": [
+        "\u0060\u0060\u0060\nvar panel = Lunet.UI.LayoutRect.Stretch(12, 12, 12, 12);\nvar bounds = panel.GetBounds(new RectangleF(0, 0, 360, 640));\nvar button = Lunet.UI.LayoutRect.Fixed(Vector2.One, new Vector2(100, 44), Vector2.One, new Vector2(-8, -8));\nvar buttonBounds = button.GetBounds(bounds);\n\u0060\u0060\u0060"
+      ],
+      "related": [],
+      "since": "0.0.1",
+      "members": [
+        {
+          "id": "M:Lunet.UI.LayoutRect.#ctor(System.Numerics.Vector2,System.Numerics.Vector2,System.Numerics.Vector2,System.Numerics.Vector2)",
+          "name": "LayoutRect",
+          "kind": "constructor",
+          "signature": "public LayoutRect(Vector2 anchorMin, Vector2 anchorMax, Vector2 offsetMin = null, Vector2 offsetMax = null)",
+          "summary": "Define as \u00E2ncoras dos limites e seus deslocamentos em unidades do pai.",
+          "remarks": "",
+          "parameters": [
+            {
+              "name": "anchorMin",
+              "type": "Vector2",
+              "description": "\u00C2ncora superior/esquerda em 0\u20131, inclusivo."
+            },
+            {
+              "name": "anchorMax",
+              "type": "Vector2",
+              "description": "\u00C2ncora inferior/direita em 0\u20131, maior ou igual a anchorMin por eixo."
+            },
+            {
+              "name": "offsetMin",
+              "type": "Vector2",
+              "description": "Deslocamento finito do limite superior/esquerdo."
+            },
+            {
+              "name": "offsetMax",
+              "type": "Vector2",
+              "description": "Deslocamento finito do limite inferior/direito."
+            }
+          ],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.LayoutRect.AnchorMax",
+          "name": "AnchorMax",
+          "kind": "property",
+          "signature": "public Vector2 AnchorMax { get; }",
+          "summary": "Fra\u00E7\u00E3o do pai em que termina o ret\u00E2ngulo.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.LayoutRect.AnchorMin",
+          "name": "AnchorMin",
+          "kind": "property",
+          "signature": "public Vector2 AnchorMin { get; }",
+          "summary": "Fra\u00E7\u00E3o do pai em que come\u00E7a o ret\u00E2ngulo.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.LayoutRect.OffsetMax",
+          "name": "OffsetMax",
+          "kind": "property",
+          "signature": "public Vector2 OffsetMax { get; }",
+          "summary": "Deslocamento dos limites direito/inferior.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.LayoutRect.OffsetMin",
+          "name": "OffsetMin",
+          "kind": "property",
+          "signature": "public Vector2 OffsetMin { get; }",
+          "summary": "Deslocamento dos limites esquerdo/superior.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "M:Lunet.UI.LayoutRect.Fixed(System.Numerics.Vector2,System.Numerics.Vector2,System.Numerics.Vector2,System.Numerics.Vector2)",
+          "name": "Fixed",
+          "kind": "method",
+          "signature": "public static LayoutRect Fixed(Vector2 anchor, Vector2 size, Vector2 pivot = null, Vector2 offset = null)",
+          "summary": "Cria um ret\u00E2ngulo de tamanho fixo preso a um ponto do pai.",
+          "remarks": "",
+          "parameters": [
+            {
+              "name": "anchor",
+              "type": "Vector2",
+              "description": "Ponto normalizado 0\u20131 do pai (0,0 = topo/esquerda; 1,1 = base/direita)."
+            },
+            {
+              "name": "size",
+              "type": "Vector2",
+              "description": "Tamanho finito n\u00E3o negativo em unidades do pai."
+            },
+            {
+              "name": "pivot",
+              "type": "Vector2",
+              "description": "Ponto normalizado 0\u20131 do ret\u00E2ngulo preso \u00E0 \u00E2ncora; padr\u00E3o canto superior esquerdo."
+            },
+            {
+              "name": "offset",
+              "type": "Vector2",
+              "description": "Deslocamento finito do ponto de ancoragem."
+            }
+          ],
+          "returns": "Layout fixo; lan\u00E7a OverflowException se seus offsets n\u00E3o couberem em float.",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "M:Lunet.UI.LayoutRect.GetBounds(Lunet.RectangleF)",
+          "name": "GetBounds",
+          "kind": "method",
+          "signature": "public RectangleF GetBounds(RectangleF parent)",
+          "summary": "Calcula os limites no mesmo espa\u00E7o de coordenadas do pai.",
+          "remarks": "Cada limite \u00E9 posi\u00E7\u00E3o do pai \u002B tamanho \u00D7 \u00E2ncora \u002B offset. Limites invertidos colapsam a zero no limite m\u00EDnimo, sem tamanho negativo. Offsets podem colocar o layout fora do pai; n\u00E3o h\u00E1 clipping autom\u00E1tico. Para aninhar, passe o resultado como pai do pr\u00F3ximo layout.",
+          "parameters": [
+            {
+              "name": "parent",
+              "type": "RectangleF",
+              "description": "Ret\u00E2ngulo finito com tamanho n\u00E3o negativo e limites represent\u00E1veis em float."
+            }
+          ],
+          "returns": "Ret\u00E2ngulo para desenho/Contains; lan\u00E7a OverflowException quando o resultado n\u00E3o cabe em float.",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "M:Lunet.UI.LayoutRect.Stretch(System.Single,System.Single,System.Single,System.Single)",
+          "name": "Stretch",
+          "kind": "method",
+          "signature": "public static LayoutRect Stretch(float left = 0f, float top = 0f, float right = 0f, float bottom = 0f)",
+          "summary": "Ocupa o pai com margens internas em cada lado.",
+          "remarks": "",
+          "parameters": [
+            {
+              "name": "left",
+              "type": "float",
+              "description": "Margem esquerda finita n\u00E3o negativa."
+            },
+            {
+              "name": "top",
+              "type": "float",
+              "description": "Margem superior finita n\u00E3o negativa."
+            },
+            {
+              "name": "right",
+              "type": "float",
+              "description": "Margem direita finita n\u00E3o negativa."
+            },
+            {
+              "name": "bottom",
+              "type": "float",
+              "description": "Margem inferior finita n\u00E3o negativa."
+            }
+          ],
+          "returns": "Layout esticado; margens grandes podem colapsar seu tamanho a zero.",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        }
+      ]
+    },
+    {
+      "id": "T:Lunet.UI.TouchButton",
+      "name": "TouchButton",
+      "namespace": "Lunet.UI",
+      "kind": "class",
+      "signature": "public sealed class TouchButton",
+      "summary": "Bot\u00E3o retangular: captura um dedo e confirma clique ao soltar dentro dos limites.",
+      "remarks": "Atualize uma vez por passo, inclusive desabilitado. Usa IDs/fases de TouchPoint, sem consumir input nem arbitrar controles sobrepostos. Cancel em OnPause/ao ocultar. N\u00E3o captura dedos que j\u00E1 estavam pressionados no Update anterior. Sem aloca\u00E7\u00E3o no loop.",
+      "examples": [
+        "\u0060\u0060\u0060\nvar button = new Lunet.UI.TouchButton(new RectangleF(20, 100, 160, 48));\nbutton.Update(input);\nif (button.WasClicked) log.Info(\u0022clicou\u0022);\n\u0060\u0060\u0060"
+      ],
+      "related": [],
+      "since": "0.0.1",
+      "members": [
+        {
+          "id": "M:Lunet.UI.TouchButton.#ctor(Lunet.RectangleF)",
+          "name": "TouchButton",
+          "kind": "constructor",
+          "signature": "public TouchButton(RectangleF bounds)",
+          "summary": "Cria um bot\u00E3o com \u00E1rea finita n\u00E3o negativa.",
+          "remarks": "",
+          "parameters": [
+            {
+              "name": "bounds",
+              "type": "RectangleF",
+              "description": "\u00C1rea no mesmo espa\u00E7o dos toques (normalmente coordenadas virtuais)."
+            }
+          ],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.TouchButton.Bounds",
+          "name": "Bounds",
+          "kind": "property",
+          "signature": "public RectangleF Bounds { get; set; }",
+          "summary": "\u00C1rea para desenho e toque. Altere antes de Update ao recalcular layout; n\u00E3o faz clipping.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.TouchButton.IsCaptured",
+          "name": "IsCaptured",
+          "kind": "property",
+          "signature": "public bool IsCaptured { get; }",
+          "summary": "H\u00E1 um dedo capturado, mesmo arrastado para fora do bot\u00E3o.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.TouchButton.IsEnabled",
+          "name": "IsEnabled",
+          "kind": "property",
+          "signature": "public bool IsEnabled { get; set; }",
+          "summary": "Desabilitar cancela imediatamente a captura e o clique; reabilitar n\u00E3o retoma um dedo j\u00E1 acompanhado.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.TouchButton.IsPressed",
+          "name": "IsPressed",
+          "kind": "property",
+          "signature": "public bool IsPressed { get; }",
+          "summary": "O dedo capturado est\u00E1 pressionado dentro dos limites no \u00FAltimo Update.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.TouchButton.WasClicked",
+          "name": "WasClicked",
+          "kind": "property",
+          "signature": "public bool WasClicked { get; }",
+          "summary": "Verdadeiro s\u00F3 no Update que recebeu Released do dedo capturado dentro dos limites.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "M:Lunet.UI.TouchButton.Cancel",
+          "name": "Cancel",
+          "kind": "method",
+          "signature": "public void Cancel()",
+          "summary": "Cancela a intera\u00E7\u00E3o sem clique; conserva o hist\u00F3rico de dedos para n\u00E3o recapturar um toque repetido.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "M:Lunet.UI.TouchButton.Draw(Lunet.Graphics.SpriteBatch,Lunet.Graphics.SpriteFont,System.String,Lunet.UI.TouchButtonStyle,System.Single)",
+          "name": "Draw",
+          "kind": "method",
+          "signature": "public void Draw(SpriteBatch batch, SpriteFont font, string text, TouchButtonStyle style, float textScale = 1f)",
+          "summary": "Desenha fundo e texto centralizado usando o estado atual. Chame entre Begin/End.",
+          "remarks": "Zero \u00E1rea n\u00E3o desenha. Reutiliza c\u00E2mera, clipping e batching do SpriteBatch atual.",
+          "parameters": [
+            {
+              "name": "batch",
+              "type": "SpriteBatch",
+              "description": "SpriteBatch do jogo."
+            },
+            {
+              "name": "font",
+              "type": "SpriteFont",
+              "description": "Fonte pertencente ao jogo; n\u00E3o \u00E9 criada nem liberada pelo bot\u00E3o."
+            },
+            {
+              "name": "text",
+              "type": "string",
+              "description": "Texto; n\u00E3o faz wrap, ajuste autom\u00E1tico nem recorte."
+            },
+            {
+              "name": "style",
+              "type": "TouchButtonStyle",
+              "description": "Cores dos estados; use TouchButtonStyle.Default para o estilo inicial."
+            },
+            {
+              "name": "textScale",
+              "type": "float",
+              "description": "Escala finita positiva do texto."
+            }
+          ],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "M:Lunet.UI.TouchButton.Update(Lunet.Input.InputState)",
+          "name": "Update",
+          "kind": "method",
+          "signature": "public void Update(InputState input)",
+          "summary": "Atualiza a captura/estado; desaparecimento ou Cancelled cancela sem clique.",
+          "remarks": "",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "InputState",
+              "description": "Snapshot do host com no m\u00E1ximo InputState.MaxTouches; posi\u00E7\u00F5es no espa\u00E7o de Bounds."
+            }
+          ],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        }
+      ]
+    },
+    {
+      "id": "T:Lunet.UI.TouchButtonStyle",
+      "name": "TouchButtonStyle",
+      "namespace": "Lunet.UI",
+      "kind": "struct",
+      "signature": "public readonly struct TouchButtonStyle",
+      "summary": "Paleta imut\u00E1vel de um TouchButton; n\u00E3o cont\u00E9m texturas, fonte ou recursos a liberar.",
+      "remarks": "default tem todas as cores transparentes; use Default para uma paleta vis\u00EDvel. \u00C9 um estilo local de bot\u00E3o, sem tema global, skins, hierarquia ou formato persistente.",
+      "examples": [
+        "\u0060\u0060\u0060\nvar colors = Lunet.UI.TouchButtonStyle.Default;\nColor pressed = colors.PressedBackground;\n\u0060\u0060\u0060"
+      ],
+      "related": [],
+      "since": "0.0.1",
+      "members": [
+        {
+          "id": "M:Lunet.UI.TouchButtonStyle.#ctor(Lunet.Graphics.Color,Lunet.Graphics.Color,Lunet.Graphics.Color,Lunet.Graphics.Color,Lunet.Graphics.Color)",
+          "name": "TouchButtonStyle",
+          "kind": "constructor",
+          "signature": "public TouchButtonStyle(Color background, Color pressedBackground, Color disabledBackground, Color foreground, Color disabledForeground)",
+          "summary": "Cria a paleta dos estados do bot\u00E3o.",
+          "remarks": "",
+          "parameters": [
+            {
+              "name": "background",
+              "type": "Color",
+              "description": "Fundo normal."
+            },
+            {
+              "name": "pressedBackground",
+              "type": "Color",
+              "description": "Fundo pressionado."
+            },
+            {
+              "name": "disabledBackground",
+              "type": "Color",
+              "description": "Fundo desabilitado."
+            },
+            {
+              "name": "foreground",
+              "type": "Color",
+              "description": "Texto habilitado."
+            },
+            {
+              "name": "disabledForeground",
+              "type": "Color",
+              "description": "Texto desabilitado."
+            }
+          ],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.TouchButtonStyle.Background",
+          "name": "Background",
+          "kind": "property",
+          "signature": "public Color Background { get; }",
+          "summary": "Fundo normal.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.TouchButtonStyle.Default",
+          "name": "Default",
+          "kind": "property",
+          "signature": "public static TouchButtonStyle Default { get; }",
+          "summary": "Paleta azul com texto branco e estado desabilitado cinza.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.TouchButtonStyle.DisabledBackground",
+          "name": "DisabledBackground",
+          "kind": "property",
+          "signature": "public Color DisabledBackground { get; }",
+          "summary": "Fundo desabilitado.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.TouchButtonStyle.DisabledForeground",
+          "name": "DisabledForeground",
+          "kind": "property",
+          "signature": "public Color DisabledForeground { get; }",
+          "summary": "Texto desabilitado.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.TouchButtonStyle.Foreground",
+          "name": "Foreground",
+          "kind": "property",
+          "signature": "public Color Foreground { get; }",
+          "summary": "Texto habilitado.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.TouchButtonStyle.PressedBackground",
+          "name": "PressedBackground",
+          "kind": "property",
+          "signature": "public Color PressedBackground { get; }",
+          "summary": "Fundo pressionado.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        }
+      ]
+    },
+    {
+      "id": "T:Lunet.UI.TouchSlider",
+      "name": "TouchSlider",
+      "namespace": "Lunet.UI",
+      "kind": "class",
+      "signature": "public sealed class TouchSlider",
+      "summary": "Slider horizontal por toque, com intervalo finito e passo opcional.",
+      "remarks": "Um dedo \u00E9 capturado ao come\u00E7ar dentro. O arraste fora \u00E9 limitado ao intervalo; Cancel/disable n\u00E3o desfazem valores j\u00E1 aplicados. Atualize inclusive desabilitado. Sem consumo de input, foco ou arbitragem de controles sobrepostos; sem aloca\u00E7\u00E3o no loop.",
+      "examples": [
+        "\u0060\u0060\u0060\nvar slider = new Lunet.UI.TouchSlider(new RectangleF(24, 100, 312, 48), 0, 100, 50, 10);\nslider.Update(input);\nif (slider.WasChanged) log.Info(\u0022valor \u0022 \u002B slider.Value);\n\u0060\u0060\u0060"
+      ],
+      "related": [],
+      "since": "0.0.1",
+      "members": [
+        {
+          "id": "M:Lunet.UI.TouchSlider.#ctor(Lunet.RectangleF,System.Single,System.Single,System.Single,System.Single,System.Single)",
+          "name": "TouchSlider",
+          "kind": "constructor",
+          "signature": "public TouchSlider(RectangleF bounds, float minimum = 0f, float maximum = 1f, float value = 0f, float step = 0f, float knobWidth = 20f)",
+          "summary": "Cria um slider; o valor inicial \u00E9 limitado e quantizado.",
+          "remarks": "",
+          "parameters": [
+            {
+              "name": "bounds",
+              "type": "RectangleF",
+              "description": "\u00C1rea finita n\u00E3o negativa no espa\u00E7o do input."
+            },
+            {
+              "name": "minimum",
+              "type": "float",
+              "description": "Limite inferior finito."
+            },
+            {
+              "name": "maximum",
+              "type": "float",
+              "description": "Limite superior finito, estritamente maior que minimum."
+            },
+            {
+              "name": "value",
+              "type": "float",
+              "description": "Valor inicial finito."
+            },
+            {
+              "name": "step",
+              "type": "float",
+              "description": "Passo finito n\u00E3o negativo; zero \u00E9 cont\u00EDnuo. A grade parte de minimum."
+            },
+            {
+              "name": "knobWidth",
+              "type": "float",
+              "description": "Largura finita positiva do cursor, reduzida se Bounds for menor."
+            }
+          ],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.TouchSlider.Bounds",
+          "name": "Bounds",
+          "kind": "property",
+          "signature": "public RectangleF Bounds { get; set; }",
+          "summary": "\u00C1rea para desenho/toque. Atualize antes de Update ap\u00F3s mudar o layout.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.TouchSlider.IsCaptured",
+          "name": "IsCaptured",
+          "kind": "property",
+          "signature": "public bool IsCaptured { get; }",
+          "summary": "O slider acompanha um dedo, inclusive fora dos limites.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.TouchSlider.IsEnabled",
+          "name": "IsEnabled",
+          "kind": "property",
+          "signature": "public bool IsEnabled { get; set; }",
+          "summary": "Desabilitar cancela a captura imediatamente, conservando o valor.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.TouchSlider.KnobWidth",
+          "name": "KnobWidth",
+          "kind": "property",
+          "signature": "public float KnobWidth { get; }",
+          "summary": "Largura desejada do cursor.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.TouchSlider.Maximum",
+          "name": "Maximum",
+          "kind": "property",
+          "signature": "public float Maximum { get; }",
+          "summary": "Limite superior, imut\u00E1vel.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.TouchSlider.Minimum",
+          "name": "Minimum",
+          "kind": "property",
+          "signature": "public float Minimum { get; }",
+          "summary": "Limite inferior, imut\u00E1vel.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.TouchSlider.NormalizedValue",
+          "name": "NormalizedValue",
+          "kind": "property",
+          "signature": "public float NormalizedValue { get; }",
+          "summary": "Fra\u00E7\u00E3o 0\u20131 do valor, calculada em double para intervalos extremos.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.TouchSlider.Step",
+          "name": "Step",
+          "kind": "property",
+          "signature": "public float Step { get; }",
+          "summary": "Passo da grade relativa ao m\u00EDnimo; zero \u00E9 cont\u00EDnuo.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.TouchSlider.Value",
+          "name": "Value",
+          "kind": "property",
+          "signature": "public float Value { get; set; }",
+          "summary": "Valor limitado/quantizado. Atribui\u00E7\u00E3o por c\u00F3digo n\u00E3o publica WasChanged.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.TouchSlider.WasChanged",
+          "name": "WasChanged",
+          "kind": "property",
+          "signature": "public bool WasChanged { get; }",
+          "summary": "Pulso do Update em que o toque mudou o valor final; o pr\u00F3ximo Update limpa.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "M:Lunet.UI.TouchSlider.Cancel",
+          "name": "Cancel",
+          "kind": "method",
+          "signature": "public void Cancel()",
+          "summary": "Cancela sem desfazer o valor; conserva hist\u00F3rico para ignorar Pressed retido.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "M:Lunet.UI.TouchSlider.Draw(Lunet.Graphics.SpriteBatch,Lunet.UI.TouchSliderStyle)",
+          "name": "Draw",
+          "kind": "method",
+          "signature": "public void Draw(SpriteBatch batch, TouchSliderStyle style)",
+          "summary": "Desenha trilho, preenchimento e cursor entre SpriteBatch.Begin/End.",
+          "remarks": "Zero \u00E1rea n\u00E3o desenha; n\u00E3o cria fonte/textura e n\u00E3o desenha r\u00F3tulo.",
+          "parameters": [
+            {
+              "name": "batch",
+              "type": "SpriteBatch",
+              "description": "SpriteBatch do jogo, com sua c\u00E2mera/clip/state atuais."
+            },
+            {
+              "name": "style",
+              "type": "TouchSliderStyle",
+              "description": "Paleta; use TouchSliderStyle.Default para cores vis\u00EDveis."
+            }
+          ],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "M:Lunet.UI.TouchSlider.GetKnobBounds",
+          "name": "GetKnobBounds",
+          "kind": "method",
+          "signature": "public RectangleF GetKnobBounds()",
+          "summary": "Limites atuais do cursor, incluindo sua largura reduzida em \u00E1reas estreitas.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "RectangleF no mesmo espa\u00E7o de Bounds.",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "M:Lunet.UI.TouchSlider.Update(Lunet.Input.InputState)",
+          "name": "Update",
+          "kind": "method",
+          "signature": "public void Update(InputState input)",
+          "summary": "Atualiza por ID; captura somente Pressed novo dentro, e ignora \u00E1rea sem percurso horizontal.",
+          "remarks": "Released aplica a posi\u00E7\u00E3o final e solta. Cancelled, dedo ausente ou posi\u00E7\u00E3o n\u00E3o finita cancelam sem alterar o \u00FAltimo valor. Cada Update produz no m\u00E1ximo um pulso WasChanged.",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "InputState",
+              "description": "Snapshot do host. Toques devem estar no mesmo espa\u00E7o de Bounds."
+            }
+          ],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        }
+      ]
+    },
+    {
+      "id": "T:Lunet.UI.TouchSliderStyle",
+      "name": "TouchSliderStyle",
+      "namespace": "Lunet.UI",
+      "kind": "struct",
+      "signature": "public readonly struct TouchSliderStyle",
+      "summary": "Paleta imut\u00E1vel de TouchSlider, sem recursos gr\u00E1ficos pr\u00F3prios.",
+      "remarks": "default \u00E9 transparente; n\u00E3o \u00E9 um tema global nem um formato persistente.",
+      "examples": [
+        "\u0060\u0060\u0060\nvar style = Lunet.UI.TouchSliderStyle.Default;\nColor color = style.Fill;\n\u0060\u0060\u0060"
+      ],
+      "related": [],
+      "since": "0.0.1",
+      "members": [
+        {
+          "id": "M:Lunet.UI.TouchSliderStyle.#ctor(Lunet.Graphics.Color,Lunet.Graphics.Color,Lunet.Graphics.Color,Lunet.Graphics.Color,Lunet.Graphics.Color,Lunet.Graphics.Color,Lunet.Graphics.Color)",
+          "name": "TouchSliderStyle",
+          "kind": "constructor",
+          "signature": "public TouchSliderStyle(Color track, Color fill, Color knob, Color pressedKnob, Color disabledTrack, Color disabledFill, Color disabledKnob)",
+          "summary": "Cria as cores dos estados do slider.",
+          "remarks": "",
+          "parameters": [
+            {
+              "name": "track",
+              "type": "Color",
+              "description": "Trilho normal."
+            },
+            {
+              "name": "fill",
+              "type": "Color",
+              "description": "Parte preenchida."
+            },
+            {
+              "name": "knob",
+              "type": "Color",
+              "description": "Cursor normal."
+            },
+            {
+              "name": "pressedKnob",
+              "type": "Color",
+              "description": "Cursor capturado."
+            },
+            {
+              "name": "disabledTrack",
+              "type": "Color",
+              "description": "Trilho desabilitado."
+            },
+            {
+              "name": "disabledFill",
+              "type": "Color",
+              "description": "Preenchimento desabilitado."
+            },
+            {
+              "name": "disabledKnob",
+              "type": "Color",
+              "description": "Cursor desabilitado."
+            }
+          ],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.TouchSliderStyle.Default",
+          "name": "Default",
+          "kind": "property",
+          "signature": "public static TouchSliderStyle Default { get; }",
+          "summary": "Paleta azul com captura amarela e estado desabilitado cinza.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.TouchSliderStyle.DisabledFill",
+          "name": "DisabledFill",
+          "kind": "property",
+          "signature": "public Color DisabledFill { get; }",
+          "summary": "Preenchimento desabilitado.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.TouchSliderStyle.DisabledKnob",
+          "name": "DisabledKnob",
+          "kind": "property",
+          "signature": "public Color DisabledKnob { get; }",
+          "summary": "Cursor desabilitado.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.TouchSliderStyle.DisabledTrack",
+          "name": "DisabledTrack",
+          "kind": "property",
+          "signature": "public Color DisabledTrack { get; }",
+          "summary": "Trilho desabilitado.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.TouchSliderStyle.Fill",
+          "name": "Fill",
+          "kind": "property",
+          "signature": "public Color Fill { get; }",
+          "summary": "Parte preenchida.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.TouchSliderStyle.Knob",
+          "name": "Knob",
+          "kind": "property",
+          "signature": "public Color Knob { get; }",
+          "summary": "Cursor normal.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.TouchSliderStyle.PressedKnob",
+          "name": "PressedKnob",
+          "kind": "property",
+          "signature": "public Color PressedKnob { get; }",
+          "summary": "Cursor capturado.",
+          "remarks": "",
+          "parameters": [],
+          "returns": "",
+          "examples": [],
+          "related": [],
+          "since": "0.0.1"
+        },
+        {
+          "id": "P:Lunet.UI.TouchSliderStyle.Track",
+          "name": "Track",
+          "kind": "property",
+          "signature": "public Color Track { get; }",
+          "summary": "Trilho normal.",
+          "remarks": "",
+          "parameters": [],
           "returns": "",
           "examples": [],
           "related": [],

@@ -11,7 +11,21 @@
 
 ### Added
 
-- APIs `SpriteAnimationClip`/`SpriteAnimator`, `Tween` e `ParticleEmitter`/`ParticleSettings`: animação, transições e partículas code-first, sem alocação no loop. Guias offline completos para projetos Em branco; novos modelos de criação seguem nos PRs #302/#307.
+- Helpers `DebugDraw.Polygon`, `Ray`, `Axes` e `Grid`: geometria de depuração transformada, limites/validação antes de desenhar e zero alocação no loop; página 7 pronta no Laboratório (LUNET-413).
+
+- `Lunet.Scenes.Scene2D`, `Entity2D` e `Component2D`: organização opcional de movimento/desenho, ownership exclusivo, percursos em ordem de inserção sem alocação e flags independentes; sexta página pronta para Run no Laboratório (LUNET-412).
+
+- `Lunet.UI.TouchButton`/`TouchButtonStyle`: clique ao soltar com captura por ID, estados/cancelamento/disable e desenho de fundo/texto com cores configuráveis, sem alocação no loop; quinta página executável do Laboratório com clique, arraste, disable, pausa e reposicionamento por LayoutRect (LUNET-410).
+
+- `Lunet.UI.LayoutRect`: âncoras, pivôs, margens Fixed/Stretch e composição de retângulos aninhados, sem alocação por cálculo; guia offline de UI com redimensionamento e toque alinhado (LUNET-409).
+
+- `TouchSlider` e `TouchSliderStyle`: arraste contínuo ou em passos, captura por dedo, cancelamento e estado desabilitado; demonstração executável na página 4 do Laboratório, sem copiar código (LUNET-411).
+
+- `SpriteFont.FromBitmap` e `BitmapGlyph`: fontes bitmap personalizadas sobre textura/atlas, métricas proporcionais, deslocamento, Unicode/fallback e layout sem alocação no loop; guia offline de placar (LUNET-408).
+
+- APIs `SpriteAnimationClip`/`SpriteAnimator`, `Tween` e `ParticleEmitter`/`ParticleSettings`: animação, transições e partículas code-first, sem alocação no loop. Guias offline completos para projetos Em branco.
+- `NineSlice` e `SpriteBatch.Draw(panel, ...)`: painéis/botões redimensionáveis com cantos preservados, recorte de atlas, escala das bordas e compressão proporcional, sem alocação por desenho; guia offline interativo (LUNET-407).
+
 
 - `Lunet.Pathfinding`: A* em grade com custos/obstáculos, quatro/oito vizinhos sem cortar cantos, buffers reutilizáveis sem alocação por busca e guia interativo offline (LUNET-406).
 

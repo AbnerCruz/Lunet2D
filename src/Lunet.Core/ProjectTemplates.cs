@@ -167,21 +167,27 @@ public static class ProjectTemplates
         }
         """.Replace("\r\n", "\n") + "\n";
 
-    /// <summary>Laboratório: painel de testes de aparelho em três páginas (dispositivos, gráficos e câmera).</summary>
+    /// <summary>Laboratório: painel de testes de aparelho em sete páginas (dispositivos, gráficos, câmera, sliders, botões, cenas e debug).</summary>
     public static string LabSource(string className) => $$"""
         using System.Numerics;
         using Lunet;
         using Lunet.Audio;
         using Lunet.Graphics;
         using Lunet.Input;
+        using Lunet.UI;
+        using Lunet.Scenes;
 
         // Laboratório: cada bloco testa um recurso no aparelho.
         // Página 1: música, som, vibração, sensores, controle, gestos de dois dedos, joystick e botão de tela.
         // Página 2: mistura (blend), shader, recorte, alvo de desenho, amostragem, pixel perfect e área segura.
         // Página 3: câmera, conversão de toque, zoom, rotação e HUD fixo.
+        // Página 4: sliders de UI, passos, disable e cancelamento na pausa.
+        // Página 5: botões de UI, clique na soltura, disable, layout e cancelamento.
+        // Página 6: cena opcional e componentes de movimento/desenho.
+        // Página 7: grade, polígono transformado, raio e eixos de debug.
         public sealed class {{className}} : Game
         {
-            readonly RectangleF pageButton = new(8, 8, 344, 30);
+            readonly TouchButton pageControl = new(new RectangleF(8, 8, 344, 30));
             readonly RectangleF pixelButton = new(8, 440, 344, 30);
             readonly RectangleF resolutionButton = new(8, 474, 344, 30);
             readonly RectangleF cameraZoomIn = new(8, 44, 80, 46);
@@ -190,6 +196,53 @@ public static class ProjectTemplates
             readonly Camera2D camera = new() { Position = new Vector2(500, 400) };
             Vector2 cameraMarker = new(500, 400);
             bool altResolution;
+            readonly TouchSlider radius = new(new RectangleF(24, 170, 312, 48), 16, 72, 36, knobWidth: 24);
+            readonly TouchSlider level = new(new RectangleF(24, 274, 312, 48), 0, 100, 50, 10, 24);
+            readonly RectangleF sliderToggle = new(24, 352, 312, 44);
+            bool sliderDisabled;
+            int sliderChanges;
+            readonly TouchButton clickButton = new(new RectangleF(24, 174, 312, 52));
+            readonly TouchButton enableButton = new(new RectangleF(24, 258, 312, 52));
+            readonly TouchButton moveButton = new(new RectangleF(24, 342, 312, 52));
+            bool buttonDisabled;
+            bool buttonMoved;
+            int buttonClicks;
+            readonly Scene2D scene = new();
+            readonly Entity2D sceneActor = new();
+            readonly TouchButton scenePause = new(new RectangleF(24, 352, 312, 44));
+            readonly TouchButton sceneHide = new(new RectangleF(24, 408, 312, 44));
+            readonly TouchButton sceneAttach = new(new RectangleF(24, 464, 312, 44));
+            SceneMotion sceneMotion = null!;
+            readonly Vector2[] debugVertices = { new(-44, -32), new(44, -32), new(44, 32), new(-44, 32) };
+            Transform2D debugTransform = new(new Vector2(180, 270));
+            Vector2 debugTarget = new(300, 310);
+            readonly Camera2D debugCamera = new() { Position = new Vector2(180, 270), Zoom = 1.2f };
+            readonly TouchButton debugToggle = new(new RectangleF(24, 416, 312, 44));
+            readonly TouchButton debugRotate = new(new RectangleF(24, 472, 148, 44));
+            readonly TouchButton debugReflect = new(new RectangleF(188, 472, 148, 44));
+            readonly TouchButton debugView = new(new RectangleF(24, 528, 312, 44));
+            bool debugShown = true, debugUseCamera;
+            Ray2D debugRay = new(new Vector2(40, 270), Vector2.UnitX);
+            bool debugHit;
+            sealed class SceneMotion : Component2D
+            {
+                public float Phase;
+                public override void Update(GameTime time)
+                {
+                    Phase += time.DeltaSeconds;
+                    Entity!.Transform.Position = new Vector2(180 + 100 * System.MathF.Sin(Phase * 2), 240);
+                }
+            }
+            sealed class ScenePainter : Component2D
+            {
+                readonly Texture2D texture;
+                public ScenePainter(Texture2D texture) { this.texture = texture; }
+                public override void Draw(SpriteBatch batch, GameTime time)
+                {
+                    var position = Entity!.Transform.Position;
+                    batch.Draw(texture, new RectangleF(position.X - 24, position.Y - 24, 48, 48), null, Color.Yellow, 0, Vector2.Zero);
+                }
+            }
             readonly (string Label, RectangleF Area)[] buttons =
             {
                 ("Música liga/desliga (fade)", new RectangleF(8, 44, 344, 30)),
@@ -226,6 +279,9 @@ public static class ProjectTemplates
                 font = SpriteFont.CreateDefault(GraphicsDevice);
                 pixel = GraphicsDevice.WhiteTexture;
                 dot = Texture2D.CreateCircle(GraphicsDevice, 64, Color.White);
+                sceneActor.Transform.Position = new Vector2(180, 240);
+                sceneMotion = new SceneMotion(); sceneActor.Add(sceneMotion);
+                sceneActor.Add(new ScenePainter(dot)); scene.Add(sceneActor);
                 rainbow = MakeRainbow(64);
                 checker = MakeChecker(8);
                 beep = Content.LoadSound("Audio/beep.wav");
@@ -236,6 +292,8 @@ public static class ProjectTemplates
                 gray = Shader.FromFragmentSource(GraphicsDevice,
                     "uniform float uAmount; void main() { vec4 c = texture(uTex, vUv) * vColor; float g = dot(c.rgb, vec3(0.3, 0.59, 0.11)); outColor = vec4(mix(c.rgb, vec3(g), uAmount), c.a); }");
             }
+
+            protected override void OnPause() { radius.Cancel(); level.Cancel(); pageControl.Cancel(); clickButton.Cancel(); enableButton.Cancel(); moveButton.Cancel(); scenePause.Cancel(); sceneHide.Cancel(); sceneAttach.Cancel(); debugToggle.Cancel(); debugRotate.Cancel(); debugReflect.Cancel(); debugView.Cancel(); }
 
             protected override void UnloadContent()
             {
@@ -275,13 +333,19 @@ public static class ProjectTemplates
             protected override void Update(GameTime time)
             {
                 clock += time.DeltaSeconds;
+                pageControl.Update(Input);
+                if (pageControl.WasClicked) page = (page + 1) % 7;
                 foreach (var gesture in Input.Gestures)
                 {
                     lastGesture = gesture.Type.ToString();
                     switch (gesture.Type)
                     {
                         case GestureType.Tap:
-                            if (pageButton.Contains(gesture.Position)) { page = (page + 1) % 3; break; }
+                            if (page == 3)
+                            {
+                                if (sliderToggle.Contains(gesture.Position)) sliderDisabled = !sliderDisabled;
+                                break;
+                            }
                             if (page == 2)
                             {
                                 if (cameraZoomIn.Contains(gesture.Position)) camera.Zoom = System.Math.Clamp(camera.Zoom * 2, 0.25f, 4);
@@ -310,6 +374,52 @@ public static class ProjectTemplates
                             boxAngle += gesture.Rotation;
                             break;
                     }
+                }
+
+                radius.IsEnabled = page == 3; level.IsEnabled = page == 3 && !sliderDisabled;
+                radius.Update(Input); level.Update(Input);
+                clickButton.IsEnabled = page == 4 && !buttonDisabled;
+                enableButton.IsEnabled = page == 4; moveButton.IsEnabled = page == 4;
+                SetClickButtonBounds();
+                clickButton.Update(Input); enableButton.Update(Input); moveButton.Update(Input);
+                scenePause.IsEnabled = sceneHide.IsEnabled = sceneAttach.IsEnabled = page == 5;
+                scenePause.Update(Input); sceneHide.Update(Input); sceneAttach.Update(Input);
+                debugToggle.IsEnabled = debugRotate.IsEnabled = debugReflect.IsEnabled = debugView.IsEnabled = page == 6;
+                debugToggle.Update(Input); debugRotate.Update(Input); debugReflect.Update(Input); debugView.Update(Input);
+                if (page == 6)
+                {
+                    if (debugToggle.WasClicked) debugShown = !debugShown;
+                    if (debugRotate.WasClicked) debugTransform.Rotation += System.MathF.PI / 8;
+                    if (debugReflect.WasClicked) debugTransform.Scale.X = -debugTransform.Scale.X;
+                    if (debugView.WasClicked) debugUseCamera = !debugUseCamera;
+                    if (Input.TryGetPointer(out var point) && point.Y >= 160 && point.Y < 400)
+                        debugTarget = debugUseCamera ? debugCamera.ScreenToWorld(point, GraphicsDevice.ViewSize) : point;
+                    var direction = debugTarget - new Vector2(40, 270);
+                    if (direction.LengthSquared() > 0.0001f) debugRay = new Ray2D(new Vector2(40, 270), direction);
+                    debugHit = debugRay.Intersects(new Circle(debugTransform.Position, 36), out _);
+                    return;
+                }
+                if (page == 5)
+                {
+                    if (scenePause.WasClicked) sceneMotion.IsEnabled = !sceneMotion.IsEnabled;
+                    if (sceneHide.WasClicked) sceneActor.IsVisible = !sceneActor.IsVisible;
+                    if (sceneAttach.WasClicked)
+                    {
+                        if (sceneActor.Scene is null) scene.Add(sceneActor); else scene.Remove(sceneActor);
+                    }
+                    scene.Update(time); return;
+                }
+                if (page == 4)
+                {
+                    if (clickButton.WasClicked) buttonClicks++;
+                    if (enableButton.WasClicked) { buttonDisabled = !buttonDisabled; clickButton.IsEnabled = !buttonDisabled; }
+                    if (moveButton.WasClicked) { buttonMoved = !buttonMoved; clickButton.Cancel(); SetClickButtonBounds(); }
+                    return;
+                }
+                if (page == 3)
+                {
+                    if (radius.WasChanged || level.WasChanged) sliderChanges++;
+                    return;
                 }
 
                 if (page == 2)
@@ -370,12 +480,93 @@ public static class ProjectTemplates
 
                 GraphicsDevice.Clear(new Color(18, 22, 40));
                 batch.Begin();
-                batch.FillRect(pageButton, new Color(90, 60, 120));
-                batch.DrawString(font, $"Página {page + 1}/3 (toque para trocar)", pageButton.Position + new Vector2(6, 8), Color.White, 2);
+                batch.FillRect(pageControl.Bounds, pageControl.IsPressed ? new Color(130, 90, 160) : new Color(90, 60, 120));
+                batch.DrawString(font, $"Página {page + 1}/7 (toque para trocar)", pageControl.Bounds.Position + new Vector2(6, 8), Color.White, 2);
                 batch.End();
                 if (page == 0) DrawDevices();
                 else if (page == 1) DrawGraphics();
-                else DrawCamera();
+                else if (page == 2) DrawCamera();
+                else if (page == 3) DrawSliders();
+                else if (page == 4) DrawButtons();
+                else if (page == 5) DrawScene(time);
+                else DrawDebug();
+            }
+
+            void DrawDebug()
+            {
+                if (debugUseCamera) batch.Begin(camera: debugCamera); else batch.Begin();
+                batch.Draw(dot, new RectangleF(144, 234, 72, 72), null, new Color(50, 90, 140), 0, Vector2.Zero);
+                if (debugShown)
+                {
+                    batch.Grid(new RectangleF(24, 160, 312, 224), new Vector2(28, 28), new Color(70, 75, 95));
+                    batch.Polygon(debugVertices, Color.Yellow, thickness: 2, transform: debugTransform.ToMatrix());
+                    batch.Axes(debugTransform, 64, Color.Red, Color.Green, 3);
+                    batch.Ray(debugRay, 280, debugHit ? Color.Green : Color.Red, 2);
+                    batch.Cross(debugTarget, 8, Color.White, 2);
+                }
+                batch.End();
+                batch.Begin();
+                batch.DrawString(font, "Depuracao visual", new Vector2(24, 64), Color.White, 2);
+                batch.DrawString(font, "Toque na area para apontar o raio.", new Vector2(24, 104), Color.White, 1.3f);
+                batch.DrawString(font, debugHit ? "Raio atinge o circulo: SIM" : "Raio atinge o circulo: NAO", new Vector2(24, 128), debugHit ? Color.Green : Color.Red, 1.4f);
+                debugToggle.Draw(batch, font, debugShown ? "Ocultar debug" : "Mostrar debug", TouchButtonStyle.Default, 2);
+                debugRotate.Draw(batch, font, "Girar", TouchButtonStyle.Default, 2);
+                debugReflect.Draw(batch, font, "Espelhar X", TouchButtonStyle.Default, 1.5f);
+                debugView.Draw(batch, font, debugUseCamera ? "Camera: ligada" : "Camera: desligada", TouchButtonStyle.Default, 2);
+                batch.End();
+            }
+
+            void DrawScene(GameTime time)
+            {
+                batch.Begin();
+                batch.DrawString(font, "Cena e componentes", new Vector2(24, 64), Color.White, 2);
+                batch.DrawString(font, "Movimento e desenho separados.", new Vector2(24, 100), Color.White, 1.4f);
+                batch.DrawString(font, "Pausar nao oculta. Ocultar nao pausa.", new Vector2(24, 124), Color.White, 1.3f);
+                batch.Rect(new RectangleF(40, 190, 280, 100), Color.White);
+                scene.Draw(batch, time);
+                scenePause.Draw(batch, font, sceneMotion.IsEnabled ? "Pausar movimento" : "Retomar movimento", TouchButtonStyle.Default, 2);
+                sceneHide.Draw(batch, font, sceneActor.IsVisible ? "Ocultar entidade" : "Mostrar entidade", TouchButtonStyle.Default, 2);
+                sceneAttach.Draw(batch, font, sceneActor.Scene is null ? "Reanexar entidade" : "Remover da cena", TouchButtonStyle.Default, 2);
+                batch.DrawString(font, $"Entidades na cena: {scene.Count}", new Vector2(24, 548), Color.Yellow, 1.5f);
+                batch.End();
+            }
+
+            void SetClickButtonBounds()
+            {
+                clickButton.Bounds = LayoutRect.Fixed(new Vector2(0.5f, 0), new Vector2(312, 52),
+                    new Vector2(0.5f, 0), new Vector2(0, buttonMoved ? 438 : 174))
+                    .GetBounds(new RectangleF(0, 0, GraphicsDevice.VirtualWidth, GraphicsDevice.VirtualHeight));
+            }
+
+            void DrawButtons()
+            {
+                batch.Begin();
+                batch.DrawString(font, "Botoes de UI", new Vector2(24, 64), Color.White, 2);
+                batch.DrawString(font, "Pressione e solte dentro para contar.", new Vector2(24, 100), Color.White, 1.4f);
+                batch.DrawString(font, "Arraste para fora. Mova o botao.", new Vector2(24, 124), Color.White, 1.4f);
+                clickButton.Draw(batch, font, "Somar clique", TouchButtonStyle.Default, 2);
+                enableButton.Draw(batch, font, buttonDisabled ? "Habilitar" : "Desabilitar", TouchButtonStyle.Default, 2);
+                moveButton.Draw(batch, font, buttonMoved ? "Mover para cima" : "Mover para baixo", TouchButtonStyle.Default, 2);
+                batch.DrawString(font, $"Cliques: {buttonClicks}", new Vector2(24, 540), Color.Yellow, 2);
+                batch.DrawString(font, "Pausa e troca de pagina cancelam.", new Vector2(24, 584), Color.White, 1.4f);
+                batch.End();
+            }
+
+            void DrawSliders()
+            {
+                batch.Begin();
+                batch.DrawString(font, "Sliders de UI", new Vector2(24, 64), Color.White, 2);
+                batch.DrawString(font, "Arraste as barras. Teste dois dedos.", new Vector2(24, 96), Color.White, 1.4f);
+                batch.DrawString(font, $"Raio continuo: {radius.Value:0.0}", new Vector2(24, 140), Color.White, 1.5f);
+                radius.Draw(batch, TouchSliderStyle.Default);
+                batch.DrawString(font, $"Passos de 10: {level.Value:0}", new Vector2(24, 244), Color.White, 1.5f);
+                level.Draw(batch, TouchSliderStyle.Default);
+                batch.FillRect(sliderToggle, new Color(60, 75, 110));
+                batch.DrawString(font, sliderDisabled ? "Habilitar passos" : "Desabilitar passos", sliderToggle.Position + new Vector2(12, 14), Color.White, 1.5f);
+                float r = radius.Value;
+                batch.Draw(dot, new RectangleF(180 - r, 490 - r, r * 2, r * 2), null, new Color(30, (byte)(80 + level.Value), 200), 0, Vector2.Zero);
+                batch.DrawString(font, $"Mudancas por toque: {sliderChanges}", new Vector2(24, 584), Color.White, 1.4f);
+                batch.End();
             }
 
             void DrawCamera()

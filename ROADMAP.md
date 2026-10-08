@@ -176,14 +176,21 @@ Integração transversal autorizada pelo Ecosystem (não altera o gate de Framew
 - [x] **LUNET-402 — Camada simples de colisão** (§7): consultas e separação SAT integradas pelo PR #291; Issue #288 encerrada, roteiro aprovado pelo proprietário no portal (Issue #303), registro no handoff `HO-20261008-lunet-collision`. Física completa permanece no item separado abaixo.
 - [ ] Física completa (`PhysicsWorld`, `RigidBody2D`, `Collider2D`, `Fixture2D`, `Joint2D`, `Contact`, `Raycast`) sobre backend maduro (Box2D ou equivalente) sem expor tipos internos; ADR da escolha.
 - [x] **LUNET-403 — `Camera2D`** (§7): posição, zoom, rotação e toque/mundo integrados pelo PR #295; Issue #293 encerrada, APK 1000126 publicado e roteiro aprovado pelo proprietário no portal (Issue #304), registro no handoff `HO-20261008-lunet-camera`.
-- [~] **LUNET-404 — Animação de sprites e tweening** (§7, §23): clips, playback e transições sem alocação por quadro; Issue #298. APIs/guias na fatia independente `HO-20261008-lunet-animation-api`; integração e validação Android pendentes. Modelo de criação separado no PR #302 (zona ProjectStore, autorização do proprietário).
-- [~] **LUNET-405 — Partículas** (§7, §23): pool fixo, burst/emissão contínua, vida, velocidade, gravidade, tamanho e cor; Issue #306. APIs/guias na fatia independente `HO-20261008-lunet-particles-api`; integração e roteiro Android pendentes. Modelo de criação separado no PR #307 (zona ProjectStore, autorização do proprietário).
+- [~] **LUNET-404 — Animação de sprites e tweening** (§7, §23): clips, playback e transições sem alocação por quadro; Issue #298. APIs/guias integrados pelo PR #316 e publicados no APK 1000141; validação Android pendente. Handoff `HO-20261008-lunet-animation-api`. Modelo opcional na revisão consolidada #317 (zona ProjectStore, autorização do proprietário).
+- [~] **LUNET-405 — Partículas** (§7, §23): pool fixo, burst/emissão contínua, vida, velocidade, gravidade, tamanho e cor; Issue #306. APIs/guias integrados pelo PR #316 e publicados no APK 1000141; roteiro Android pendente. Handoff `HO-20261008-lunet-particles-api`. Modelo opcional na revisão consolidada #317 (zona ProjectStore, autorização do proprietário).
 - [ ] Tilemaps (carregar formato do Tile Studio, colisão).
 - [ ] Fontes personalizadas (bitmap e TrueType).
+- [~] **LUNET-408 — Fontes bitmap personalizadas** (§7, §23): imagem/atlas, métricas proporcionais e fallback Unicode em SpriteFont/DrawString; Issue #327; Integrado pelo PR #328 e publicado no APK 1000155; roteiro Android pendente. TrueType permanece pendente; não conclui o item completo de fontes.
 - [ ] UI (layout, âncoras, nine-slice, temas).
+- [~] **LUNET-410 — Botões de UI por toque e estilos de cores** (§7, §23): captura por dedo, clique ao soltar, cancelamento/disable e desenho pelo SpriteBatch; Issue #331. API e quinta página executável no Laboratório em revisão; integração/release e roteiro Android pendentes, sem árvore de UI, foco ou temas completos.
+
+- [~] **LUNET-409 — Layout de UI por âncoras e margens** (§7, §23): LayoutRect/Fixed/Stretch e composição aninhada sem alocação; Issue #329; Integrado pelo PR #330 e publicado no APK 1000164; roteiro Android pendente. Incremento de UI; temas e controles completos permanecem pendentes.
+
+- [~] **LUNET-411 — Slider por toque e demonstração no Laboratório** (§7, §23): faixa/valor/passo, captura por dedo, cancelamento/disable e desenho; Issue #335. Implementação e suíte combinada 438/438 verificadas; integrado pelo PR #336 e publicado no APK 1000160; validação Android pendente. Demonstração executável na página 4 do Laboratório.
+- [~] **LUNET-407 — Nine-slice** (§7, §23): painéis/botões com cantos preservados, recorte de atlas e bordas escaláveis; Issue #319. Incremento de UI, sem concluir layout/âncoras/temas; Integrado pelo PR #324 e publicado no APK 1000150; roteiro Android pendente.
 - [~] **LUNET-406 — Pathfinding A*** (§7): grade com obstáculos/custos, quatro/oito vizinhos e buffers reutilizáveis; Issue #311. Integrado pelo PR #313 e publicado no APK 1000133; guia offline e CI verdes, aparelho pendente. Handoff `HO-20261008-lunet-pathfinding`.
-- [ ] Scene2D opcional e API entidade/componente opcional (sem obrigar ECS).
-- [ ] Debug APIs e helpers.
+- [~] **LUNET-412 — Scene2D opcional e API entidade/componente** (§7, §23): Issue #338; ownership exclusivo, ordem de inserção e percursos sem alocação. Demonstração pronta na página 6 do Laboratório; integrado pelo PR #339 e publicado no APK 1000169, suíte 475/475 e CI verdes; DEVICE pendente. Sem obrigar ECS.
+- [~] **LUNET-413 — Debug APIs e helpers** (§7, §23): polígonos, raios, eixos de transformação e grades limitadas; Issue #340. Demonstração pronta na página 7 do Laboratório; build sem warnings/errors, 485/485 testes; integração/release e DEVICE pendentes.
 - [ ] Profiler básico do framework (FPS, frame time, update/render time, draw calls, triângulos, memória, GC, audio underruns) (§23), com o painel Profiler no workspace (movido da Fase 3).
 - [ ] Auditoria de fechamento da Fase 4 registrada em `docs/audits/`.
 
