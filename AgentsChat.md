@@ -370,8 +370,35 @@ Não guarde tokens, senhas ou dados privados. Não marque validação de aparelh
 - CI original do PR #411: Lunet.Tests, consistency e APK verdes; CI de versão reconciliada deve ser verificado. DEVICE pendente.
 - Somente Product Lunet2D e handoff, sem dados do usuário nem contratos alterados. NN-002/008/017/018/022.
 
+### 20261010-chatgpt-lunet-truetype — ChatGPT → integrador — review
+- LUNET-430 / Issue #414 / Fase 4 §7: introduz fontes TrueType pré-rasterizadas ao carregar o jogo, integração direta com SpriteFont e SpriteBatch já existentes.
+- Backend C# StbTrueTypeSharp vendorizado a partir do upstream público no commit 5985efc, compilado com STBSHARP_INTERNAL sem PackageReference no Framework; uso de unsafe localizado. Decisão ADR 0008.
+- `TrueTypeFont.Bake` aceita bytes TTF, charset Unicode explícito, altura e atlas limitados; `ContentManager.LoadTrueTypeFont` cacheia por arquivo/opções e gerencia Dispose automaticamente. Sem fonte do sistema no dispositivo; TTF deve estar no Content ou fornecido pelo jogo.
+- Testes de atlas/corretude/fallback/medida, cache e descarte, ausência de GC no Measure/Draw e exemplo Game.cs compilado com GameCompiler; CI e APK pendentes até verificação. DEVICE ainda não validado.
+- Sem alterar ProjectStore, jogos existentes, formato de projeto, contratos externos ou sistema de exportação; compatibilidade de fontes bitmap preservada. Reuso product-specific. NN-002/008/017/018/022.
+
+### 20261010-chatgpt-lunet-truetype-architecture-fix — ChatGPT → integrador — review
+- A primeira execução do PR #415 acusou ArchitectureTests.FrameworkHasNoPackageReferences. Resolvido sem enfraquecer o teste: código upstream público integrado como fonte interna pinada, nenhum pacote externo no Framework.
+- Corrigidos a ordenação de LoadTrueTypeFont após LoadTileMap na snapshot API e o charset dos testes de métricas proporcionais; testes e consistency da nova revisão pendentes.
+- Não mudou ProjectStore, projetos do usuário, API antiga nem versões de contrato. NN-002/008/017/018/022.
+
+### 20261010-chatgpt-lunet-truetype-reconciled — ChatGPT → integrador — review
+- PR #415 reconciliado à main `785e0d3`: API atual e histórico preservados.
+- CI anterior verde em `c1f6dce`; revisão combinada necessita nova validação e DEVICE pendente.
+
+### 20261010-chatgpt-lunet-truetype-reconcile-again — ChatGPT → integrador — review
+- PR #415 conciliado à main `f91683a48` sem regressão do Framework; checks anteriores completos verdes, nova CI/APK/DEVICE a conferir.
+
 ### 20261010-chatgpt-lunet-ui-stack — ChatGPT → integrador — review
 - LUNET-431 / Issue #417 / Fase 4: `UiStackLayout` responsivo por coluna e linha, tamanhos fixos e flex, padding/spacing finitos e alinhamento transversal.
 - Composição da geometria resultante com `GraphicsDevice.SafeArea`, `LayoutRect` e os Bounds dos controles existentes, sem gerenciar dedos, estado de jogo ou persistência.
 - Testes para proporções, overflow, viewport zero, retrato/paisagem, zero alocação de managed heap em Arrange e guia Game.cs compilado/executado no GameHost com saída de desenho.
 - Product-specific, sem tocar ProjectStore, Android host, outros Products, dados ou interfaces públicas existentes. NN-002/008/017/018/022; CI e DEVICE pendentes. Fase 4 permanece aberta.
+
+### 20261010-chatgpt-lunet-432-relayout — ChatGPT → integrador — review
+- LUNET-432, Issue #422, Fase 4: correção de captura obsoleta ao mudar Bounds de TouchButton, TouchSlider e TouchScrollArea; TouchListView não cancela com geometria idêntica atribuída por frame.
+- Testes cobrem clique fantasma, alteração de slider, scroll/inércia, seleção, limites inválidos e hot path sem GC. CI, APK e DEVICE pendentes. Nenhum formato ou arquivo de projeto do usuário alterado. Somente Product Lunet2D.
+
+### 20261010-chatgpt-lunet-432-slider-compat — ChatGPT → integrador — review
+- CI inicial da PR #424 detectou falha em TouchSliderTests.NewBoundsApplyOnNextUpdateAndNoTravelCancels: comportamento preexistente é continuar arraste sobre novos Bounds. Reconciliado: slider preserva contrato, controle de captura deve usar Cancel() pelo jogo ao ocultar UI.
+- Teste novo LUNET-432 alterado para cobrir continuidade intencional, sem enfraquecer teste preexistente. Botões/listas/scroll permanecem protegidos contra interação fantasma ao relayout. Revalidar CI; DEVICE pendente.
