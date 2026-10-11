@@ -419,3 +419,10 @@ Não guarde tokens, senhas ou dados privados. Não marque validação de aparelh
 - Sem ProjectStore ou dependência externa; CI de revisão e DEVICE pendentes. Issue #430 registra bloqueio de consistency preexistente na main.
 
 - 2026-10-10 — ChatGPT / LUNET-435: após reversão #476, retomado o próximo item REAL da Fase 4, física completa (SPEC §7). Backend Box2D.NET gerenciado; primeiro incremento com PhysicsWorld, corpos/fixtures, gravidade, colisão, raycast e junta de distância; CI/DEVICE pendentes, não encerrar gate. Issue #477; sem mudanças em outros produtos ou projetos salvos.
+
+
+- 2026-10-10 — ChatGPT / LUNET-435 fase 4: continuação da física existente #477; desenvolvimento de cápsulas/segmentos, juntas revoluta/prismática, contatos de fim/sensores, filtros e controle de corpo; testes de regressão e API, entrega por PR e CI. Não é função nova fora do roadmap. DEVICE e gate da Fase 4 continuam pendentes.
+
+- 2026-10-10 — ChatGPT / LUNET-435: teste Android da física real dentro do Laboratório existente (módulo Colisões, sem 13ª página). Mantidos os 12 módulos e o SAT original; mundo físico, sensor e botão de reinício via API pública. Inclui testes de geração/compilação e roteiro DEVICE; aprovação no aparelho continua pendente.
+
+- 2026-10-10 — ChatGPT / LUNET-414 (#343): complemento do Profiler previsto na Fase 4, contando somente texturas RGBA8 conhecidas pelo GlesBackend; pico e recursos liberados no overlay do Preview. Contagem não promete VRAM nativa, GPU time ou audio underruns. CI e DEVICE pendentes; sem alterações em outros produtos ou projetos salvos.
