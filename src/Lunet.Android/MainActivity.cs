@@ -325,6 +325,7 @@ public sealed partial class MainActivity : Activity
         bar.AddView(MakeBarButton("▶ Run", Run, 2f));
         bar.AddView(MakeBarButton("↶", () => _editor?.Undo()));
         bar.AddView(MakeBarButton("↷", () => _editor?.Redo()));
+        bar.AddView(MakeBarButton("Arte", ShowArtTools));
         bar.AddView(MakeBarButton("⋯", ShowMenu));
         root.AddView(bar);
 
@@ -1152,6 +1153,8 @@ public sealed partial class MainActivity : Activity
 
     protected override void OnPause()
     {
+        _spriteStudio?.Suspend();
+        _tileStudio?.Suspend();
         SaveCurrent();
         _preview?.Pause();
         base.OnPause();

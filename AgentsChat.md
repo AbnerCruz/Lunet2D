@@ -483,3 +483,17 @@ Não guarde tokens, senhas ou dados privados. Não marque validação de aparelh
 - Build, testes, consistency, Android CI/APK e DEVICE desta entrega em verificação; roteiro `docs/guides/audio.md`.
 
 - Verificação local final: build sem warnings/errors; 688/688 testes, 16 novos casos; 22/22 consistency e self-test global completo aprovados. Primeira CI Android apontou CS0234 na qualificação Android.Media; corrigida com global::Android.Media. Revalidar APK final. PR #765, sem merge manual.
+
+### 20261025-codex-lunet-studio — Codex → integrador — review
+- Ordem explícita do proprietário: entregar ferramentas e build utilizáveis; não continuar refinamento de áudio. Repriorização registrada no ROADMAP, exceção já prevista em DEVELOPMENT §1.4.
+- LUNET-439 preservado no commit local cdbf2e2, branch feat/lunet-f4-audio-coverage-20261025; não incluído nesta entrega.
+- LUNET-440 / Issue #775: primeiro Sprite/Animation Studio Android. Boundary Lunet.Studio nasce com ferramenta real conforme ADR 0007; Framework/Compiler/Runtime independentes. Nenhuma infraestrutura de plataforma nova.
+- Fonte .sprite.json no mesmo projeto; export PNG; desenho, frames, playback, undo/redo, onion skin. Faltam layers, seleção, zoom/pan, eventos e estados: não é fechamento F5.
+- APK de jogo continua ausente; é prioridade seguinte, não confundir com APK do IDE ou ZIP. Validação nativa e DEVICE pendentes.
+
+
+### 20261025-chatgpt-lunet-tile-studio — ChatGPT → integrador — review
+- LUNET-441 / Issue #777, branch `feat/lunet-tile-studio-20261025`, base `e06c97aa37d3cd9ef2be478c508fbbadfb8d0911`.
+- Primeiro Tile Studio Android por toque, com seletor visual de tiles em PNG, desenho/borracha, camadas, controle de colisão e visibilidade, ordenação, undo/redo por gesto e persistência atômica em JSON v1 do próprio runtime. Menu Arte compacto também acessa Sprite Studio já integrado.
+- Reutiliza TileMap imutável da F4, não cria outro runtime/formato, não reabre áudio nem altera o fluxo de compilação. APK do **jogo** segue pendente separado; sem declarar Fase 5 concluída.
+- Testes portáteis criados para histórico, serialização e colisão; CI Android e DEVICE pendentes, não executar falsa validação. Guia `docs/guides/tile-studio.md` e ROADMAP documentam limites.
