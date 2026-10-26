@@ -29,6 +29,7 @@ public sealed partial class MainActivity : Activity
     private const int ExportRequestCode = 4101;
     private const int ImportRequestCode = 4102;
     private const int ImportProjectRequestCode = 4103;
+    private const int GameApkExportRequestCode = 4104;
     private bool _importingProject;
     private const int MaxConsoleLines = 300;
     private static readonly Lazy<GameCompiler> SharedCompiler = new(() =>
@@ -61,6 +62,8 @@ public sealed partial class MainActivity : Activity
     private IReadOnlyList<SourceFile>? _previousRun;
     private ChangeReport? _pendingChange;
     private string? _pendingExport;
+    private string? _pendingGameApkPath;
+    private string? _pendingGameApkName;
 
     private PreviewHost? _preview;
     private bool _isolatedRunning;
@@ -70,6 +73,8 @@ public sealed partial class MainActivity : Activity
         base.OnCreate(savedInstanceState);
         _store = new ProjectStore(System.IO.Path.Combine(FilesDir!.AbsolutePath, "Projects"));
         _pendingExport = savedInstanceState?.GetString("pendingExport");
+        _pendingGameApkPath = savedInstanceState?.GetString("pendingGameApkPath");
+        _pendingGameApkName = savedInstanceState?.GetString("pendingGameApkName");
         LoadSettings();
         ShowProjects();
     }
@@ -325,7 +330,7 @@ public sealed partial class MainActivity : Activity
         bar.AddView(MakeBarButton("▶ Run", Run, 2f));
         bar.AddView(MakeBarButton("↶", () => _editor?.Undo()));
         bar.AddView(MakeBarButton("↷", () => _editor?.Redo()));
-        bar.AddView(MakeBarButton("Arte", ShowArtTools));
+        bar.AddView(MakeBarButton("Assets", ShowAssets, 1.5f));
         bar.AddView(MakeBarButton("⋯", ShowMenu));
         root.AddView(bar);
 
@@ -1127,6 +1132,16 @@ public sealed partial class MainActivity : Activity
             if (resultCode == Result.Ok && data?.Data is AndroidUri picked) CompleteImport(picked);
             return;
         }
+        if (requestCode == ImportAudioRequestCode)
+        {
+            if (resultCode == Result.Ok && data?.Data is AndroidUri audioUri) CompleteAudioImport(audioUri);
+            return;
+        }
+        if (requestCode == GameApkExportRequestCode)
+        {
+            CompleteApkExport(resultCode, data?.Data);
+            return;
+        }
         if (requestCode != ExportRequestCode) return;
         var name = _pendingExport;
         _pendingExport = null;
@@ -1148,6 +1163,8 @@ public sealed partial class MainActivity : Activity
     protected override void OnSaveInstanceState(Bundle outState)
     {
         outState.PutString("pendingExport", _pendingExport);
+        outState.PutString("pendingGameApkPath", _pendingGameApkPath);
+        outState.PutString("pendingGameApkName", _pendingGameApkName);
         base.OnSaveInstanceState(outState);
     }
 
@@ -1155,6 +1172,7 @@ public sealed partial class MainActivity : Activity
     {
         _spriteStudio?.Suspend();
         _tileStudio?.Suspend();
+        _audioStudio?.Suspend();
         SaveCurrent();
         _preview?.Pause();
         base.OnPause();
@@ -1169,6 +1187,7 @@ public sealed partial class MainActivity : Activity
 
     protected override void OnDestroy()
     {
+        _audioStudio?.Dispose();
         DisposeEcosystemConnection();
         DisposePreview();
         base.OnDestroy();

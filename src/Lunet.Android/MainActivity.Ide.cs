@@ -127,6 +127,7 @@ public sealed partial class MainActivity
         ("Salvar", () => HandleCommand(EditorCommand.Save)),
         ("Formatar documento", () => HandleCommand(EditorCommand.Format)),
         ("Exportar projeto (ZIP)", () => ExportProject()),
+        ("Gerar APK do jogo", AskBuildGameApk),
         ("Importar imagem PNG", ImportImage),
     ]);
 
@@ -169,6 +170,9 @@ public sealed partial class MainActivity
     private void ShowToolsMenu() => ShowActionMenu("Ferramentas",
     [
         ("Documentação", () => HandleCommand(EditorCommand.Documentation)),
+        ("Assets", ShowAssets),
+        ("Audio Studio", ShowAudioStudio),
+        ("Sprites e tilemaps", ShowArtTools),
         ("Connections", ShowConnections),
         ("Inspecionar texto (Host local)", InspectEditorWithLocalHost),
         ("Exportar logs (Console e Problemas)", ExportLogs),
