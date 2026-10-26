@@ -497,3 +497,22 @@ Não guarde tokens, senhas ou dados privados. Não marque validação de aparelh
 - Primeiro Tile Studio Android por toque, com seletor visual de tiles em PNG, desenho/borracha, camadas, controle de colisão e visibilidade, ordenação, undo/redo por gesto e persistência atômica em JSON v1 do próprio runtime. Menu Arte compacto também acessa Sprite Studio já integrado.
 - Reutiliza TileMap imutável da F4, não cria outro runtime/formato, não reabre áudio nem altera o fluxo de compilação. APK do **jogo** segue pendente separado; sem declarar Fase 5 concluída.
 - Testes portáteis criados para histórico, serialização e colisão; CI Android e DEVICE pendentes, não executar falsa validação. Guia `docs/guides/tile-studio.md` e ROADMAP documentam limites.
+
+### 20261025-chatgpt-lunet-sprite-tools — ChatGPT → integrador — review
+- Pedido do proprietário: ter editor de sprites utilizável junto ao Tile Studio; LUNET-442 / Issue #779, branch `feat/lunet-sprite-tools-20261025`, base `e06c97aa37d3cd9ef2be478c508fbbadfb8d0911`.
+- Ampliação do Sprite Studio já integrado: linha e retângulo com prévia por toque, retângulo preenchido, flip vertical, zoom/pan, grade opcional e cor ARGB personalizada; usa documento JSON v1 original, sem migração nem novos formatos.
+- Testes de retângulos, limites, transparência, flip vertical e isolamento de frames; CI Android/DEVICE pendentes. Camadas e seleção completas continuam backlog F5, sem declaração de produto finalizado.
+
+### 20261025-chatgpt-lunet-assets-content — ChatGPT → integrador — review
+- LUNET-443 / Issue #783: correção de resolução de assets entre Sprite Studio e jogo; branch `fix/lunet-project-assets-content-20261025` baseada na main.
+- Causa: Studio exporta sprites em `Assets/`, mas os Previews só liam `Content/`. `ProjectContentSource` preserva `Content/` e adiciona fallback restrito a `Assets/` do mesmo projeto; nome igual prioriza `Content/Assets/`. Nenhum arquivo antigo é movido nem excluído.
+- Preview rápido e isolado atualizados; testes de carregamento de PNG pelo GameHost, fallback, precedência e traversal; guia e roadmap atualizados. CI e DEVICE aguardam validação; APK do jogo continua requisito F9 separado.
+
+### 20261025-chatgpt-lunet-animation-assets-followup — ChatGPT → integrador — review
+- Complemento LUNET-443/#783, resposta do proprietário: Sprite Studio produz animações; salvar apenas `.sprite.json` não basta ao jogo. O editor agora regenera automaticamente `Assets/<nome>.png` como spritesheet horizontal de todos os frames a cada gravação da fonte JSON; altera FPS no JSON, não destrói dados editáveis.
+- Botão de exemplo explica uso de `SpriteAnimationClip`/`SpriteAnimator` (atualização por DeltaSeconds e desenho de frame); testes portáteis validam layout de três frames, transparência e FPS após round-trip. Previews usam `ProjectContentSource` do PR; DEVICE pendente. CI/compilação Android após complemento a conferir.
+
+### 20261026-chatgpt-lunet-native-tilemap — ChatGPT → integrador — review
+- LUNET-444/Issue #785. Ordem do proprietário: corrigir primeiro o Tile Studio que exige PNG importado (e o import recusou); depois seguir F9 APK independente do jogo.
+- Criação in-app de `Content/Data/map-*.tilemap.json` e atlas `Content/Textures/tiles-*.sprite.json` + `.png` no mesmo fluxo, sem imports. Editor de pixels reutilizado em modo de tileset (um frame, grade de tile destacada) com retorno ao Tile Studio e recarga do PNG. Nenhum formato de runtime alterado. Implementado em branch `fix/lunet-tilemap-native-create-20261026`.
+- Testes portáteis de formato/atlas e build Android pelo CI; DEVICE pendente. Trabalho APK do jogo deve ocorrer separado, sem confundir com APK da IDE.
