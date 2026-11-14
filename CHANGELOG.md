@@ -1,5 +1,33 @@
 # Changelog
 
+- LUNET-506: autotile no Tile Studio — Terreno → escolha 16 ou 47 tiles a partir do tile selecionado; pintar e apagar ajustam bordas e cantos sozinhos.
+
+- LUNET-505: Data Studio — dados do jogo (inimigos, itens, fases, diálogos) como tabelas: colunas com tipo e regras, opções, referências entre tabelas, validação com destaque, ordenar, CSV e classe C# gerada para o jogo ler os dados tipados.
+
+- LUNET-482 (DEC-0062, alternativa A): primeira versão do Lunet para desktop (Windows, Linux, macOS) em Avalonia — abre projetos, edita, compila e roda o jogo com prévia, mouse e teclado. Rasterizador em CPU com o mesmo resultado do Android (2000 sprites em 4 ms). Ainda é um spike: falta medir num computador com tela real. O Android não mudou.
+- Correção: o guia do modelo de partículas (`docs/guides/particulas.md`) havia sido substituído pelo do Particle Studio; foi restaurado e o novo guia está em `docs/guides/particle-studio.md`.
+
+- LUNET-504: Particle Studio — efeitos de fogo, fumaça, faíscas, explosão, chuva, neve, magia, poeira, bolhas e confete com prévia ao vivo; o Framework ganha direção e abertura, formas de nascimento, resistência do ar, variações, giro, gradiente de cor e brilho aditivo, e o jogo carrega o efeito salvo com `Content.LoadParticleEmitter`. Efeitos antigos continuam idênticos.
+
+- LUNET-503: multijogador no mesmo aparelho — tela dividida para até 4 jogadores com toques por região e uma câmera por jogador (`SpriteBatch.Begin(camera, região)`), e `TurnOrder` para jogos por vez (hot-seat) e partidas assíncronas com proteção contra jogadas sobre um estado antigo.
+
+- LUNET-502: servidor dedicado headless — `lunet-server` compila a pasta de um projeto e roda o jogo sem tela no Windows, Linux ou macOS; `Game.IsHeadless` diz ao jogo que ele é o servidor; `HeadlessGraphicsBackend` e `HeadlessGameRunner` também servem para testes automatizados.
+
+- LUNET-501: multiplayer realtime no Lunet.Networking — transporte UDP (LiteNetLib interno), transporte em memória para jogar no mesmo aparelho e simulador de rede ruim; sessões com host, servidor dedicado e clientes (versão e jogo conferidos, lista de jogadores, mensagens tipadas, proteção contra flood), relógio sincronizado, objetos e variáveis de rede com interpolação, predição com reconciliação e descoberta de partidas na rede local. O cenário do gate da Fase 7 (dois clientes em tempo real com latência, jitter e perda simulados) passa nos testes; falta validar com dois aparelhos.
+
+- LUNET-500: o Audio Studio compõe músicas (faixas, padrões, arranjo, instrumentos sintetizados com filtro e envelope, bateria, eco e reverb, escalas, swing) com geradores de melodia, acordes, arpejo, baixo e batida, e desenha efeitos sonoros complexos (moeda, laser, explosão, power-up, pulo, magia…) com variações. Exporta WAV para `Content/Audio/` mantendo a fonte editável (`.song.json`/`.sfx.json`).
+
+- LUNET-499: Palette Studio — a paleta oficial do jogo (`Assets/palette.json`): começar de uma paleta inicial, das artes do projeto ou vazia; rampas de tons (sombras mais frias, luzes mais quentes), harmonias, contraste para texto/HUD, importar/exportar `.gpl` e hex, e exportar `Data/GamePalette.cs` para o código usar as mesmas cores. O Sprite Studio mostra as cores do projeto primeiro e ajusta um sprite à paleta; a IA usa a paleta oficial.
+
+- LUNET-498: a IA entende se você quer aprender ou que ela faça (modos Auto/Ensinar/Fazer, botão *Fazer por mim*), começa cada pedido conhecendo o projeto (mapa de arquivos, classes e membros + referência rápida da API), organiza código em arquivos e pastas por responsabilidade e avisa quando um arquivo cresce demais, pesquisa código de referência na internet com proteções, e as configurações ganharam chave por provedor, lista de modelos do provedor e *Testar conexão*. Validação no aparelho pendente.
+
+- LUNET-497 / PR #932: histórico local integral e persistido desde o pedido; IA continua em foreground service Android fora do chat; painel exibe a tarefa e o progresso ao retornar. Caminhos de sprite corrigidos e compatíveis com `Content/` legado; verificação da existência e assinatura PNG na compilação da IA. 886 testes e CI Android verdes; teste físico do proprietário pendente.
+
+- Fixed / Novo projeto (14/11, revisão solicitada): `Game.cs` volta a incluir `Initialize`, `LoadContent`, `Update`, `Draw`, `UnloadContent`, `SpriteBatch.Begin/End` e fundo básico, mas sem a bola, textura ou movimento por toque. O launcher não exibe modelos demo/protótipos: formulário único para nome, orientação, resolução, updates/s, Fit/Fill, versão e ID Android opcional. Configurações persistidas no `lunet.json` e refletidas no código inicial; demos continuam disponíveis apenas para testes internos.
+
+- LUNET-491 (feito, sem validação em aparelho): Sprite Studio ganha seleção por retângulo, laço e varinha, com mover, redimensionar, girar, espelhar, duplicar e apagar sobre camada flutuante (grava só ao aplicar; cancelar e desfazer). Áudio: prévia com cursor, toque na onda, repetir e ajuste ao vivo, inclusive ao criar efeitos. Assets: prévia real de sprite animado, imagem, som, fonte e dados, também a partir do Explorer. Ícones: catálogo vetorial de contorno substitui caracteres Unicode em toda a interface. Roteiro: `docs/guides/validacao-studios-icones.md`.
+- LUNET-492 (Fase A, estudo): viabilidade de desktop/navegador/iOS conferida contra o código; `PlatformPortabilityTests` fiscaliza que as bibliotecas portáteis não usam APIs de plataforma. ADR 0012 Proposto e DEC-0062 pendente; nenhum host novo.
+
 - LUNET-470 / Workbench mobile-first (em revisão, CI/DEVICE pendentes): nova entrada de projetos, workspace de código em foco com navegação Código/Arquivos/Erros/Console/Ações, command palette em português com busca sem distinção de caixa/acentos, drawer modal com scrim, alvos de toque de 48dp, toolbar sem captura de foco e Back contextual. Testes de contrato registrados antes da implementação, pesquisa rastreável em `docs/research/mobile-workbench-ux-2026-11-01.md`. Não afirma redesign dos Studios, compilação verificada nem release publicada.
 
 - Fixed / host standalone: entrega Game.OnPause na thread GL antes de suspendê-la, usando o mesmo PauseForBackground do PreviewHost. Regressão provada por smoke Android que falhou antes e passou após a correção; JSON privado e restore após force-stop conferidos.

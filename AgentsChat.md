@@ -644,3 +644,82 @@ Não guarde tokens, senhas ou dados privados. Não marque validação de aparelh
 - Entregue: IA configurada uma vez (Keystore, presets), contexto do editor, compilação como verificação com reparo, checkpoint/diff/desfazer, IA criando sprites; painel de IA não modal e "Pedir à IA" na seleção; workbench redesenhado (tokens LunetUi, barra única, teclas de código, navegação oculta ao digitar, palette com arquivos); notas e esboços em Notes/; Sprite/Tile Studio com gestos e canvas eficiente; realce incremental no editor.
 - Capturas reais por emulador (`lunet2d-ui-screens`, harness compilado só com LunetUiDemo). O workflow é zona crítica e sairá deste PR antes de ele ficar pronto.
 - DEVICE pendente para tudo. Handoff `HO-20261114-lunet-cowork-redesign.json`.
+
+### 20261114-claude-lunet-ai-expertise-chat — 2026-11-14 (America/Sao_Paulo) — Claude → integrador — review
+- Ordens do proprietário: IA especialista no Lunet (o que existe e o que não existe), importar arquivos, IA recebendo imagens/arquivos (desenho → sprite), coerência artística e contextual; depois "o chat ainda está ruim: estuda primeiro, implementa depois, inspire-se no topo do mercado".
+- Entregue (LUNET-488/489/490): base de conhecimento offline (API, guias, capacidades), estilo do projeto e avisos de coerência, percepção de imagem por grade quantizada, anexos e importação em Notas, chat redesenhado (tela de conversa, Markdown, cartões de código, linha do tempo de passos, ações por mensagem, pílulas de contexto).
+- Limite declarado: o runtime compartilhado só envia texto (sem visão nativa e sem streaming); a IA vê imagens pela grade e o progresso aparece pela linha do tempo. Mudar isso exige alterar o contrato do runtime em outro Product.
+- Evidência: 829 testes locais, 22/22 checks, capturas no emulador (execução 43580364121). DEVICE pendente. Handoff `HO-20261114-lunet-ai-expertise.json`.
+
+### 20261114-claude-lunet-studios-icons-multiplatform — 2026-11-14 (America/Sao_Paulo) — Claude → integrador — review
+- Ordens do proprietário: (1) Audio Studio sem prévia; (2) editor de desenho com seleção de pixels para mover/redimensionar/girar; (3) prévia ao tocar assets (sprite etc.); (4) ícones pouco intuitivos; depois, iniciativa formal de expansão multiplataforma trazida de uma avaliação externa.
+- LUNET-491, testes antes da lógica: `SpriteSelectionTests` (17) e `LunetIconsTests`. Núcleo sem Android em `Lunet.Studio` (`SpriteSelection`, `SpriteFloating`, `VectorIcon`/`LunetIcons`); UI Android: seleção no `SpriteStudioView` (alças, rotação com encaixe, barra de ações), `AudioPreviewView` (onda, cursor, seek, ajuste ao vivo; usada no Audio Studio, na criação de efeitos e nos Assets), `FramePreviewView` e painel de Assets/Explorer com prévia real, `IconDrawable`/`IconButton` trocando caracteres Unicode por ícones vetoriais (mapa de glifos antigos → ícone, para migrar todos os pontos de uma vez).
+- LUNET-492 (Fase A): estudo conferido contra o código (`docs/architecture/multiplataforma-viabilidade-2026-11-14.md`), ADR 0012 **Proposto**, DEC-0062 **pendente** no portal, `PlatformPortabilityTests` (fatos que já valiam passaram de primeira; não há "vermelho" a mostrar). Itens 482/493–496 no ROADMAP. Nenhum host novo; SPEC §2 não alterado até a decisão.
+- Verificação local: 857 testes passando, build Android Debug sem erros. Sem emulador/aparelho nesta sessão: nada visual foi visto; DEVICE pendente (`docs/guides/validacao-studios-icones.md`).
+- Limites: seleção sem camadas e sem copiar/colar entre frames; varinha sem "adicionar à seleção"; ícones de diálogos de lista (AlertDialog) ainda usam texto; "Preview isolado" e Tile Studio herdam os ícones novos mas não ganharam seleção de tiles.
+
+
+### 20261114-fix-blank-project-template — 2026-11-14 — correção solicitada pelo proprietário
+- Diagnóstico: `ProjectTemplates.BlankGameSource` criava explicitamente um círculo amarelo de 48px, fundo CornflowerBlue e movimento por toque. O template chamado “Em branco” era, na prática, uma demo.
+- Correção: o template agora gera apenas uma classe vazia derivada de `Game`; nenhum objeto, recurso, entrada ou desenho é criado automaticamente.
+- Testes: contrato do projeto verifica ausência de SpriteBatch/Texture2D/Draw/CreateCircle; jornada E2E confirma o template limpo e escreve seu próprio jogo para continuar validando assets, tilemap, preview e exportação.
+- Estado: CI e build APK pendentes nesta branch; não houve validação visual em aparelho.
+
+
+### 20261114-starter-config-revision — 2026-11-14 — ajuste explícito do proprietário
+- Responde a: 20261114-fix-blank-project-template.
+- Objetivo: manter a estrutura inicial programável de Game.cs e remover **apenas a bola e sua lógica**, não o ciclo de vida nem SpriteBatch. No menu inicial, retirar a seleção de demos e expor configuração completa de novo projeto.
+- Branch: `fix/lunet-starter-and-project-setup`. Arquivos: `ProjectTemplates.cs`, `ProjectStore.cs`, `ProjectManifest.cs`, `MainActivity.cs`, testes de projeto/demo/E2E/jornada, ROADMAP e CHANGELOG.
+- Implementação: bootstrap code-first com Initialize/LoadContent/Update/Draw/UnloadContent, SpriteBatch.Begin/End e Clear CornflowerBlue, sem sprite ou input de demonstração; criação customizada com validação de nome, orientação, dimensões, updates/s, Fit/Fill, versão e PackageId opcional estável com detecção de duplicatas. UI única de configuração no launcher; nenhuma opção demo. Demos de teste continuam internas.
+- Verificação: testes de contrato, integridade do manifesto, segurança do ID Android e jornada E2E revisados. Aguardar execução real no CI e validação da interface em Android físico.
+- Importante: versão inicial fica em lunet.json; não declarar versionCode/versionName do APK com base nela sem conferir o empacotador.
+
+### 20261114-lunet-ai-background-history-assets — acompanhamento LUNET-497
+- PR #932; branch `fix/lunet-ai-background-history-assets-20261114`. Prints mostram perda de continuidade do chat e `FileNotFoundException: Content/Textures/Cells.png` depois da alegação de correção.
+- Auditoria de `MainActivity.Chat`, `LunetAiSession`, `LunetAiSpriteTool`, `ContentManager` e Preview identificou estado acoplado à tela, mensagens só persistidas ao terminar e caminho redundante `Content/` na sugestão da ferramenta.
+- Implementado serviço Android foreground `dataSync`, estado independente de Activity, passos reexibidos, histórico local integral, validação de textura e fallback legado; adicionados testes. Nenhum outro produto nem o runtime compartilhado foi alterado.
+- Evidências: `lunet2d-ci` 886/886, screens, consistency e release workflows verdes no commit `6eeac0f5488379ba6779a9eefb2d7c891adb4918`. O projeto real do print não foi testado. A validação física no aparelho permanece pendente.
+- Próximo passo: integrar o PR e distribuir APK candidato; testar navegação, bloqueio da tela, interrupção, cancelamento e Preview do projeto com `Cells.png`.
+
+### 20261114-claude-lunet-ai-teach-do — 2026-11-14 (America/Sao_Paulo) — Claude → integrador — review
+- Ordem do proprietário (assumir a correção da IA e continuar o Lunet). PR #932 (LUNET-497, outro agente) conferido: 886 testes e 22/22 checks locais verdes; segue no integrador. Este trabalho parte dele (branch `ccr-8229d3db-dmnw7l`, base `bbc849e` + #932).
+- LUNET-498: `LunetAiIntent` (Auto/Ensinar/Fazer; Ensinar sem ferramentas de escrita, botão *Fazer por mim*), `LunetAiProjectMap` (mapa de arquivos/mídia/símbolos por Roslyn só de sintaxe no prompt), `LunetAiQuickReference` (fonte única da referência rápida), `LunetAiArchitecture` + `lunet.code.outline` (um tipo por arquivo, pastas por responsabilidade, avisos na compilação), `LunetAiWeb*` (pesquisa e leitura de páginas públicas com proteções; reuse_assessment possible-candidate, sem extração — NN-022), `LunetAiModelCatalog` (modelos do provedor, testar conexão) e chave por provedor.
+- Verificação local: 931 testes, build Android Debug sem erros. Sem aparelho: DEVICE pendente (`docs/guides/ia-lunet.md` §Validação). Handoff `HO-20261114-lunet-ai-teach-do.json`.
+
+### 20261114-claude-lunet-palette — 2026-11-14 (America/Sao_Paulo) — Claude → integrador — review
+- Pedido do proprietário: ferramenta de paletas de cores para consistência visual. LUNET-499 na mesma branch/PR #933.
+- `ProjectPalette` (Lunet.Studio): arquivo canônico `Assets/palette.json` (NN-001: a análise de cores dos sprites vira só fallback quando não há paleta oficial), rampas com hue shifting, harmonias, extração k-means, remapear, contraste WCAG, `.gpl`/hex, exportação `Data/GamePalette.cs` (compila — teste). Palette Studio Android; Sprite Studio e IA usam a paleta.
+- Verificação local: 951 testes; build Android sem erros. DEVICE pendente (`docs/guides/paleta-de-cores.md`). Handoff `HO-20261114-lunet-palette-studio.json`.
+
+### 20261114-claude-lunet-music — 2026-11-14 (America/Sao_Paulo) — Claude → integrador — review
+- PRs #932 e #933 integrados (release lunet2d-v0.0.1-dev.1000550). Branch `ccr-8229d3db-dmnw7l` reiniciada sobre a main; LUNET-499 (paleta) e LUNET-500 (música) seguem juntos no próximo PR.
+- LUNET-500: `Lunet.Studio.Music` (teoria musical, `MusicSong`, `Instrument`, `MusicRenderer` com polyBLEP/FM/ADSR/filtro/bateria/eco/reverb/limitador, `SoundDesigner`, `WavEncoder`), `MusicStudioView` e diálogo de efeitos no Android. Fontes `.song.json`/`.sfx.json` em `Content/Audio/` (autoridade: a fonte; o WAV é derivado, como a spritesheet).
+- Verificação local: 23 testes de música, build Android sem erros. DEVICE pendente (`docs/guides/estudio-de-musica.md`). Handoff `HO-20261114-lunet-music-studio.json`.
+
+### 20261114-claude-lunet-multiplayer — 2026-11-14 (America/Sao_Paulo) — Claude → integrador — review
+- PR #934 (paleta + música) integrado. Prioridade do proprietário: multiplayer. LUNET-501 executa o passo 5 do ADR 0011.
+- `Lunet.Networking`: `INetworkTransport` (`UdpTransport` com LiteNetLib 2.1.5 interno, `LoopbackTransport`, `NetworkSimulator`), `NetWriter`/`NetReader`, `NetworkSession` (+ `NetworkClock`), replicação (`NetworkObject`, `NetworkVariable<T>`, snapshots, interpolação), `ClientPrediction`, `LanDiscovery`/`ILobbyDirectory`/`IMatchmaker`. `TcpGameHost/Client` mantidos.
+- Gate da Fase 7 automatizado (servidor + 2 clientes, latência 80±30 ms, 8% perda): converge. UDP real e descoberta LAN testados em loopback (5 rodadas sem falha). LiteNetLib presente no APK do Lunet e no template standalone (build local). Exemplo do guia compila (teste).
+- Verificação local: 996 testes. DEVICE pendente (dois aparelhos; `docs/guides/multiplayer.md`). Handoff `HO-20261114-lunet-multiplayer-realtime.json`.
+
+### 20261114-claude-lunet-headless-server — 2026-11-14 (America/Sao_Paulo) — Claude → integrador — review
+- LUNET-502 (Fase 7, "servidor .NET headless"; parte da multiplataforma que não depende de DEC-0062): `HeadlessGraphicsBackend` e `Game.IsHeadless` (Framework, aditivo, documentado; API JSON regenerada), `HeadlessGameRunner` (Runtime), executável `src/Lunet.Server` (`lunet-server <projeto> [--check] [--seconds N] [--saves pasta]`).
+- Teste ponta a ponta: pasta de projeto → compilação → servidor dedicado headless → cliente UDP real recebe a replicação. 999 testes locais.
+- DEC-0062 (tecnologia da casca desktop/navegador/iOS) segue pendente no portal; nenhum host de UI novo criado. Handoff `HO-20261114-lunet-headless-server.json`.
+
+### 20261114-claude-lunet-local-multiplayer — 2026-11-14 (America/Sao_Paulo) — Claude → integrador — review
+- LUNET-503 (Fase 7, multiplayer local): `SplitScreen`, `SpriteBatch.Begin(Camera2D, RectangleF)`, `TurnOrder` (Framework, aditivo, documentado com exemplo compilado; API JSON regenerada). 1010 testes locais. Limite: um gamepad por vez (backend Android). Handoff `HO-20261114-lunet-local-multiplayer.json`.
+
+### 20261114-claude-lunet-particles — 2026-11-14 (America/Sao_Paulo) — Claude → integrador — review
+- LUNET-504 (Fase 5, Particle Studio): Framework estendido sem quebrar efeitos existentes (padrões consomem o mesmo sorteio; testes antigos de partículas intactos), JSON de efeitos, `Content.LoadParticleEmitter`, `ParticleEmitter.Snapshot`; `ParticlePresets`/`ParticleDraft` (Lunet.Studio); `ParticleStudioView` com prévia do próprio emissor. 1019 testes; build Android sem erros. DEVICE pendente (`docs/guides/particle-studio.md`). Handoff `HO-20261114-lunet-particle-studio.json`.
+
+### 20261114-claude-lunet-desktop-spike — 2026-11-14 (America/Sao_Paulo) — Claude → integrador — review
+- O proprietário escolheu DEC-0062 alternativa A no portal (Issue #942) e aprovou validações de 480, 481, 483, 488, 491, 497, 498, 499 e 500. Consequências do DEC-0062 aplicadas (SPEC §2/§3, ADR 0012 Aceito, `consequencesApplied`). A marcação `[x]` dos itens validados no ROADMAP não foi feita nesta sessão (bloqueada pela política de permissões do ambiente do agente); fica para o proprietário ou para o fluxo de validação.
+- Corrigido erro meu: `docs/guides/particulas.md` (guia do modelo de partículas, compilado por testes) tinha sido sobrescrito no commit do Particle Studio; restaurado, e o guia novo está em `particle-studio.md`.
+- LUNET-482: `SoftwareGraphicsBackend`, `Lunet.Host`, `Lunet.Desktop` com `--measure`; relatório `docs/architecture/spike-avalonia-desktop-2026-11-14.md`. 1025 testes. Handoff `HO-20261114-lunet-desktop-spike.json`.
+
+### 20261114-claude-lunet-data-studio — 2026-11-14 (America/Sao_Paulo) — Claude → integrador — review
+- LUNET-505 (Fase 5, Data Studio): `Lunet.Studio.Data.DataTable` (inferência, tipos, validação, referências, CSV, classe C# que compila e desserializa — teste), `DataStudioView` e entrada no Studio. 7 testes novos; build Android sem erros. DEVICE pendente (`docs/guides/data-studio.md`). Handoff `HO-20261114-lunet-data-studio.json`.
+
+### 20261114-claude-lunet-autotile — 2026-11-14 (America/Sao_Paulo) — Claude → integrador — review
+- LUNET-506 (Fase 5, Tile Studio): `AutotileSet` (16 lados / 47 blob) e pincel de terreno no `TileStudioSession` e na tela. 5 testes; build Android sem erros. Handoff no `HO-20261114-lunet-data-studio.json` (mesma rodada).

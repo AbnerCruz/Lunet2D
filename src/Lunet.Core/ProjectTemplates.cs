@@ -191,38 +191,46 @@ public static class ProjectTemplates
         }
         """;
 
-    public static string BlankGameSource(string className) => $$"""
-        using System.Numerics;
+    /// <summary>Esqueleto de jogo pronto para programar, sem entidades, sprites ou lógica de demonstração.</summary>
+    public static string BlankGameSource(string className, int virtualWidth = 360, int virtualHeight = 640,
+        int updatesPerSecond = 60, string viewportScaling = "Fit") => $$"""
         using Lunet;
         using Lunet.Graphics;
 
-        // Toque na tela para mover a bola. Edite e aperte Run.
         public sealed class {{className}} : Game
         {
-            SpriteBatch batch = null!;
-            Texture2D ball = null!;
-            Vector2 position;
+            private SpriteBatch batch = null!;
+
+            protected override void Initialize()
+            {
+                Configuration.VirtualWidth = {{virtualWidth}};
+                Configuration.VirtualHeight = {{virtualHeight}};
+                Configuration.UpdatesPerSecond = {{updatesPerSecond}};
+                Configuration.ViewportScaling = ViewportScalingMode.{{viewportScaling}};
+            }
 
             protected override void LoadContent()
             {
                 batch = new SpriteBatch(GraphicsDevice);
-                ball = Texture2D.CreateCircle(GraphicsDevice, 48, Color.Yellow);
-                position = new Vector2(GraphicsDevice.VirtualWidth, GraphicsDevice.VirtualHeight) / 2;
-                Log.Info("Jogo iniciado. Toque na tela.");
+                // Carregue texturas, fontes e áudio quando precisar.
             }
 
             protected override void Update(GameTime time)
             {
-                if (Input.TryGetPointer(out var pointer))
-                    position = Vector2.Lerp(position, pointer, 0.25f);
+                // Atualize a lógica do jogo aqui.
             }
 
             protected override void Draw(GameTime time)
             {
                 GraphicsDevice.Clear(Color.CornflowerBlue);
                 batch.Begin();
-                batch.Draw(ball, position - new Vector2(ball.Width, ball.Height) / 2, Color.White);
+                // Desenhe o conteúdo do jogo aqui.
                 batch.End();
+            }
+
+            protected override void UnloadContent()
+            {
+                // Libere recursos criados pelo jogo, quando houver.
             }
         }
         """.Replace("\r\n", "\n") + "\n";

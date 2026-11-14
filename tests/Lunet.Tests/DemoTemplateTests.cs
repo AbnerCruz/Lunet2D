@@ -102,7 +102,13 @@ public class DemoTemplateTests : IDisposable
     public void Blank_StillDefaultTemplate()
     {
         var project = new ProjectStore(_root).Create("Vazio");
-        Assert.DoesNotContain("SpriteFont", project.ReadText("Game.cs"));
+        var source = project.ReadText("Game.cs");
+        Assert.DoesNotContain("SpriteFont", source);
+        Assert.DoesNotContain("Texture2D", source);
+        Assert.Contains("SpriteBatch batch", source);
+        Assert.Contains("protected override void Update(GameTime time)", source);
+        Assert.Contains("protected override void Draw(GameTime time)", source);
+        Assert.DoesNotContain("CreateCircle", source);
         Assert.False(Directory.Exists(Path.Combine(_root, "Vazio", "Content", "Audio")));
     }
 }

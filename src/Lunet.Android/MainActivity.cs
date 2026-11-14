@@ -15,6 +15,7 @@ using Lunet.Core;
 using Lunet.Editor;
 using Lunet.Input;
 using Lunet.Storage;
+using Lunet.Studio;
 using AndroidColor = Android.Graphics.Color;
 using AndroidUri = Android.Net.Uri;
 
@@ -72,6 +73,7 @@ public sealed partial class MainActivity : Activity
     protected override void OnCreate(Bundle? savedInstanceState)
     {
         base.OnCreate(savedInstanceState);
+        LunetAiRuns.Changed += OnAiRunChanged;
         // Edge colors follow the app instead of the system default (LUNET-483).
         Window?.SetStatusBarColor(LunetUi.Background);
         Window?.SetNavigationBarColor(LunetUi.Background);
@@ -92,10 +94,7 @@ public sealed partial class MainActivity : Activity
 
     private Button MakeButton(string label, Action action)
     {
-        var button = new Button(this) { Text = label };
-        button.SetAllCaps(false);
-        button.Click += (_, _) => action();
-        return button;
+        return LunetUi.Button(this, label, action);
     }
 
     /// <summary>Botão compacto para barras: divide a largura com os vizinhos em vez de sair da tela.</summary>
@@ -198,7 +197,7 @@ public sealed partial class MainActivity : Activity
             empty.SetPadding(Dp(18), Dp(22), Dp(18), Dp(22));
             empty.Background = LunetUi.Shape(this, LunetUi.Surface, LunetUi.Radius, LunetUi.Border);
             empty.AddView(LunetUi.Label(this, "Comece seu primeiro jogo", LunetUi.TextBody, LunetUi.Text, bold: true));
-            empty.AddView(LunetUi.Label(this, "Toque em “Novo jogo” para criar a partir de um modelo pronto para rodar. A IA pode ajudar a construir as mecânicas.", LunetUi.TextLabel, LunetUi.TextMuted));
+            empty.AddView(LunetUi.Label(this, "Toque em “Novo jogo” e configure seu projeto. O Game.cs começa estruturado e sem objetos de demonstração.", LunetUi.TextLabel, LunetUi.TextMuted));
             list.AddView(empty, LunetUi.FillWidth());
         }
         var scroll = new ScrollView(this);
@@ -267,66 +266,117 @@ public sealed partial class MainActivity : Activity
             })!.Show();
     }
 
+    /// <summary>Somente projetos novos; demos e protótipos não fazem parte do launcher.</summary>
     private void AskForProjectName()
     {
-        var input = new EditText(this) { Hint = "Nome do projeto" };
-        input.SetSingleLine(true);
-        var template = new[] { ProjectTemplate.Blank };
         var form = Vertical();
-        form.SetPadding(Dp(16), Dp(8), Dp(16), 0);
-        form.AddView(input);
-        // RadioButtons criados por código precisam de id para o RadioGroup desmarcar o anterior.
-        var group = new RadioGroup(this);
-        var options = new (string Text, ProjectTemplate Template)[]
+        form.SetPadding(Dp(16), Dp(8), Dp(16), Dp(12));
+
+        EditText AddField(string label, string value, string hint, bool numeric = false)
         {
-            ("Em branco (bola que segue o toque)", ProjectTemplate.Blank),
-            ("Demo: Coletor de moedas (texto, gestos, som, salvamento)", ProjectTemplate.CoinCatcher),
-            ("Laboratório: testa música, sensores, controle, vibração, gestos e gráficos", ProjectTemplate.Lab),
-            ("Demo: Animação e tween (quadros, movimento, pausa)", ProjectTemplate.Animation),
-            ("Demo: Partículas (explosões, fluxo, capacidade fixa)", ProjectTemplate.Particles),
-        };
-        var byId = new Dictionary<int, ProjectTemplate>();
-        foreach (var (text, choice) in options)
-        {
-            var button = new RadioButton(this) { Id = View.GenerateViewId(), Text = text };
-            byId[button.Id] = choice;
-            group.AddView(button);
-            if (choice == ProjectTemplate.Blank) group.Check(button.Id);
+            var caption = LunetUi.Label(this, label, LunetUi.TextLabel, LunetUi.TextMuted);
+            caption.SetPadding(0, Dp(10), 0, 0);
+            form.AddView(caption);
+            var field = new EditText(this) { Text = value, Hint = hint };
+            field.SetSingleLine(true);
+            if (numeric) field.InputType = InputTypes.ClassNumber;
+            form.AddView(field, LunetUi.FillWidth(Dp(48)));
+            return field;
         }
-        group.CheckedChange += (_, e) =>
-        {
-            if (byId.TryGetValue(e.CheckedId, out var chosen)) template[0] = chosen;
-        };
-        form.AddView(group);
-        form.AddView(new TextView(this) { Text = "Orientação do jogo", TextSize = 15 });
-        string orientation = "portrait";
+
+        var nameInput = AddField("Nome do projeto", "", "Ex.: MeuJogo");
+        form.AddView(LunetUi.Label(this,
+            "Cria um Game.cs com ciclo de vida e SpriteBatch, sem personagens nem demonstrações.",
+            LunetUi.TextCaption, LunetUi.TextMuted));
+
+        form.AddView(LunetUi.Label(this, "Orientação", LunetUi.TextLabel, LunetUi.TextMuted, bold: true));
         var orientationGroup = new RadioGroup(this);
-        var vertical = new RadioButton(this) { Id = View.GenerateViewId(), Text = "Vertical (9:16)" };
-        var horizontal = new RadioButton(this) { Id = View.GenerateViewId(), Text = "Horizontal (16:9)" };
-        orientationGroup.AddView(vertical);
-        orientationGroup.AddView(horizontal);
-        orientationGroup.Check(vertical.Id);
-        orientationGroup.CheckedChange += (_, _) =>
-            orientation = orientationGroup.CheckedRadioButtonId == horizontal.Id ? "landscape" : "portrait";
+        var portrait = new RadioButton(this) { Id = View.GenerateViewId(), Text = "Vertical (retrato)" };
+        var landscape = new RadioButton(this) { Id = View.GenerateViewId(), Text = "Horizontal (paisagem)" };
+        orientationGroup.AddView(portrait);
+        orientationGroup.AddView(landscape);
+        orientationGroup.Check(portrait.Id);
         form.AddView(orientationGroup);
+
+        var widthInput = AddField("Resolução virtual · largura (px)", "360", "Ex.: 360", numeric: true);
+        var heightInput = AddField("Resolução virtual · altura (px)", "640", "Ex.: 640", numeric: true);
+        orientationGroup.CheckedChange += (_, _) =>
+        {
+            // Só troca o preset; dimensões personalizadas jamais são sobrescritas.
+            string width = widthInput.Text?.Trim() ?? "";
+            string height = heightInput.Text?.Trim() ?? "";
+            if (orientationGroup.CheckedRadioButtonId == landscape.Id && width == "360" && height == "640")
+            {
+                widthInput.Text = "640";
+                heightInput.Text = "360";
+            }
+            else if (orientationGroup.CheckedRadioButtonId == portrait.Id && width == "640" && height == "360")
+            {
+                widthInput.Text = "360";
+                heightInput.Text = "640";
+            }
+        };
+
+        var updatesInput = AddField("Atualizações por segundo", "60", "Ex.: 60", numeric: true);
+        form.AddView(LunetUi.Label(this, "Ajuste de tela", LunetUi.TextLabel, LunetUi.TextMuted, bold: true));
+        var viewportGroup = new RadioGroup(this);
+        var fit = new RadioButton(this) { Id = View.GenerateViewId(), Text = "Fit — exibe tudo, com barras se necessário" };
+        var fill = new RadioButton(this) { Id = View.GenerateViewId(), Text = "Fill — preenche a tela, pode recortar" };
+        viewportGroup.AddView(fit);
+        viewportGroup.AddView(fill);
+        viewportGroup.Check(fit.Id);
+        form.AddView(viewportGroup);
+
+        var versionInput = AddField("Versão inicial do jogo", "0.1.0", "Ex.: 1.0.0");
+        var packageInput = AddField("Identificador Android (opcional)", "",
+            "Automático e único — ou com.exemplo.jogo");
+        form.AddView(LunetUi.Label(this,
+            "O identificador e o GameId são estáveis para futuras atualizações do APK. O formato do projeto, o Framework e o arquivo Game.cs são gerenciados pelo Lunet.",
+            LunetUi.TextCaption, LunetUi.TextMuted));
+
+        AlertDialog? dialog = null;
+        var actions = LunetUi.Row(this, 8);
+        actions.SetPadding(0, Dp(16), 0, 0);
+        actions.AddView(LunetUi.Button(this, "Cancelar", () => dialog?.Dismiss(), ButtonStyle.Quiet),
+            new LinearLayout.LayoutParams(0, Dp(48), 1f));
+        actions.AddView(LunetUi.Button(this, "Criar projeto", () =>
+        {
+            if (!int.TryParse(widthInput.Text?.Trim(), out int width) ||
+                !int.TryParse(heightInput.Text?.Trim(), out int height) ||
+                !int.TryParse(updatesInput.Text?.Trim(), out int updates))
+            {
+                Toast.MakeText(this, "Preencha largura, altura e atualizações com números inteiros.", ToastLength.Long)?.Show();
+                return;
+            }
+            try
+            {
+                var settings = new ProjectCreationSettings(
+                    nameInput.Text ?? "",
+                    orientationGroup.CheckedRadioButtonId == landscape.Id ? "landscape" : "portrait",
+                    width,
+                    height,
+                    updates,
+                    viewportGroup.CheckedRadioButtonId == fill.Id ? "Fill" : "Fit",
+                    versionInput.Text?.Trim() ?? "",
+                    packageInput.Text?.Trim());
+                var project = _store.Create(settings);
+                dialog?.Dismiss();
+                OpenProject(project.Name);
+            }
+            catch (Exception ex) when (ex is ProjectException or IOException or UnauthorizedAccessException)
+            {
+                Toast.MakeText(this, ex.Message, ToastLength.Long)?.Show();
+            }
+        }, ButtonStyle.Primary), new LinearLayout.LayoutParams(0, Dp(48), 1.3f));
+        form.AddView(actions);
+
         var scroll = new ScrollView(this);
         scroll.AddView(form);
-        new AlertDialog.Builder(this)!
-            .SetTitle("Novo projeto")!
+        dialog = new AlertDialog.Builder(this)!
+            .SetTitle("Novo projeto · configuração")!
             .SetView(scroll)!
-            .SetNegativeButton("Cancelar", (_, _) => { })!
-            .SetPositiveButton("Criar", (_, _) =>
-            {
-                try
-                {
-                    var project = _store.Create(input.Text ?? "", template[0], orientation);
-                    OpenProject(project.Name);
-                }
-                catch (Exception ex) when (ex is ProjectException or IOException)
-                {
-                    Toast.MakeText(this, ex.Message, ToastLength.Long)?.Show();
-                }
-            })!.Show();
+            .Create();
+        dialog.Show();
     }
 
     // ---------- Workspace ----------
@@ -512,14 +562,14 @@ public sealed partial class MainActivity : Activity
         var header = new LinearLayout(this) { Orientation = Orientation.Horizontal };
         header.SetPadding(Dp(8), Dp(8), Dp(8), Dp(4));
         header.AddView(WorkbenchLabel("ARQUIVOS", 14, true), new LinearLayout.LayoutParams(0, Dp(48), 1));
-        var newItem = WorkbenchButton("+", () => ShowActionMenu("Criar no projeto",
+        var newItem = WorkbenchButton("＋", () => ShowActionMenu("Criar no projeto",
         [
             ("Novo arquivo", () => AskForNewEntry("", isDirectory: false)),
             ("Nova pasta", () => AskForNewEntry("", isDirectory: true)),
         ]));
         newItem.ContentDescription = "Criar arquivo ou pasta";
         header.AddView(newItem, new LinearLayout.LayoutParams(Dp(48), Dp(48)));
-        var closeDrawer = WorkbenchButton("×", ToggleExplorer);
+        var closeDrawer = WorkbenchButton("✕", ToggleExplorer);
         closeDrawer.ContentDescription = "Fechar explorador de arquivos";
         header.AddView(closeDrawer, new LinearLayout.LayoutParams(Dp(48), Dp(48)));
         _drawer.AddView(header);
@@ -549,12 +599,7 @@ public sealed partial class MainActivity : Activity
         {
             if (HasCollapsedAncestor(entry.Path)) continue;
             var captured = entry;
-            var glyph = entry.IsDirectory ? (_collapsed.Contains(entry.Path) ? "▸  " : "▾  ")
-                : entry.Path.EndsWith(".cs", StringComparison.OrdinalIgnoreCase) ? "{ }  "
-                : entry.Path.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ? "▦  "
-                : entry.Path.EndsWith(".md", StringComparison.OrdinalIgnoreCase) ? "¶  "
-                : entry.Path.EndsWith(".wav", StringComparison.OrdinalIgnoreCase) ? "∿  " : "·  ";
-            var row = new TextView(this) { Text = glyph + entry.Name, TextSize = 14 };
+            var row = new TextView(this) { Text = entry.Name, TextSize = 14 };
             row.SetPadding(Dp(12 + entry.Depth * 14), Dp(12), Dp(8), Dp(12));
             row.SetMinHeight(Dp(46));
             row.SetSingleLine(true);
@@ -563,10 +608,27 @@ public sealed partial class MainActivity : Activity
             row.Background = LunetUi.Pressable(this, entry.Path == _openFile ? LunetUi.AccentSoft : LunetUi.Surface, LunetUi.RadiusSmall);
             row.SetTextColor(entry.IsDirectory ? LunetUi.AccentText : IsTextFile(entry.Path) ? LunetUi.Text : LunetUi.TextMuted);
             if (entry.IsDirectory) row.SetTypeface(LunetUi.Mono, TypefaceStyle.Bold);
+            LunetUi.SetLeadingIcon(row, LunetIcons.Get(ExplorerIcon(entry)), 14);
             row.Click += (_, _) => OnExplorerTap(captured);
             row.LongClick += (_, _) => ShowEntryMenu(captured);
             _drawerList.AddView(row);
         }
+    }
+
+    /// <summary>Ícone de um item do Explorer: o tipo do arquivo, não um caractere decorativo.</summary>
+    private string ExplorerIcon(ExplorerEntry entry)
+    {
+        if (entry.IsDirectory) return _collapsed.Contains(entry.Path) ? "chevron-right" : "chevron-down";
+        string path = entry.Path.ToLowerInvariant();
+        if (path.EndsWith(".sprite.json")) return "sprite";
+        if (path.EndsWith(".tilemap.json")) return "tilemap";
+        if (path.EndsWith(".cs")) return "code";
+        if (path.EndsWith(".png") || path.EndsWith(".jpg") || path.EndsWith(".jpeg")) return "image";
+        if (path.EndsWith(".md") || path.EndsWith(".txt")) return "note";
+        if (path.EndsWith(".wav") || path.EndsWith(".ogg") || path.EndsWith(".mp3")) return "waveform";
+        if (path.EndsWith(".ttf") || path.EndsWith(".otf")) return "font";
+        if (path.EndsWith(".json")) return "data";
+        return "file";
     }
 
     private bool HasCollapsedAncestor(string path)
@@ -589,9 +651,10 @@ public sealed partial class MainActivity : Activity
             RefreshExplorer();
             return;
         }
-        if (!IsTextFile(entry.Path))
+        if (!IsTextFile(entry.Path) || entry.Path.EndsWith(".sprite.json", StringComparison.OrdinalIgnoreCase))
         {
-            Toast.MakeText(this, "Arquivo binário: use-o pelo código (ex.: Content.LoadTexture).", ToastLength.Short)?.Show();
+            if (!ShowAssetPreview(entry.Path))
+                Toast.MakeText(this, "Sem prévia para este arquivo. Use-o pelo código (ex.: Content.LoadTexture).", ToastLength.Short)?.Show();
             return;
         }
         OpenFile(entry.Path);
@@ -613,6 +676,19 @@ public sealed partial class MainActivity : Activity
                 case "Excluir": AskToDelete(entry); break;
             }
         })!.Show();
+    }
+
+    /// <summary>Abre a prévia de um arquivo de Content/ ou Assets/ tocado no Explorer (sprite, imagem, som, fonte…).</summary>
+    private bool ShowAssetPreview(string path)
+    {
+        if (_project is null) return false;
+        var assets = ProjectAssetCatalog.Build(_project.ListFiles());
+        var asset = assets.FirstOrDefault(a => string.Equals(a.Path, path, StringComparison.OrdinalIgnoreCase))
+            ?? assets.FirstOrDefault(a => string.Equals(a.PreviewPath, path, StringComparison.OrdinalIgnoreCase));
+        if (asset is null) return false;
+        _explorerOpenForPreview = true;
+        ShowAssetDetails(asset, null);
+        return true;
     }
 
     private static bool IsTextFile(string path) =>
@@ -1308,6 +1384,7 @@ public sealed partial class MainActivity : Activity
     protected override void OnActivityResult(int requestCode, Result resultCode, Intent? data)
     {
         base.OnActivityResult(requestCode, resultCode, data);
+        if (HandleAttachmentResult(requestCode, resultCode, data)) return;
         if (requestCode == ImportProjectRequestCode)
         {
             if (resultCode == Result.Ok && data?.Data is AndroidUri projectUri) CompleteProjectImport(projectUri);
@@ -1373,6 +1450,7 @@ public sealed partial class MainActivity : Activity
 
     protected override void OnDestroy()
     {
+        LunetAiRuns.Changed -= OnAiRunChanged;
         _audioStudio?.Dispose();
         DisposeEcosystemConnection();
         DisposePreview();
