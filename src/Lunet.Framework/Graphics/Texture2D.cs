@@ -48,6 +48,17 @@ public sealed class Texture2D : IDisposable
         return new Texture2D(device, device.Backend.CreateTexture(width, height, rgba, filter), width, height, filter);
     }
 
+    /// <summary>Cria uma textura RGBA com dimensões inteiras agrupadas.</summary>
+    /// <param name="device">Dispositivo gráfico.</param>
+    /// <param name="size">Largura e altura em pixels.</param>
+    /// <param name="rgba">Pixels RGBA.</param>
+    /// <param name="filter">Filtro de amostragem.</param>
+    /// <returns>A textura criada.</returns>
+    [System.Runtime.CompilerServices.OverloadResolutionPriority(-1)]
+    public static Texture2D FromPixels(GraphicsDevice device, System.Drawing.Size size,
+        ReadOnlySpan<byte> rgba, TextureFilter filter = TextureFilter.Linear) =>
+        FromPixels(device, size.Width, size.Height, rgba, filter);
+
     /// <summary>Cria uma textura de uma cor só.</summary>
     /// <param name="device">Dispositivo gráfico.</param>
     /// <param name="width">Largura.</param>
@@ -63,6 +74,14 @@ public sealed class Texture2D : IDisposable
         }
         return FromPixels(device, width, height, pixels);
     }
+
+    /// <summary>Cria uma textura de uma cor só com dimensões inteiras agrupadas.</summary>
+    /// <param name="device">Dispositivo gráfico.</param>
+    /// <param name="size">Largura e altura em pixels.</param>
+    /// <param name="color">Cor.</param>
+    /// <returns>A textura criada.</returns>
+    public static Texture2D CreateSolid(GraphicsDevice device, System.Drawing.Size size, Color color) =>
+        CreateSolid(device, size.Width, size.Height, color);
 
     /// <summary>Disco preenchido (borda com meio pixel de suavização de alfa).</summary>
     /// <param name="device">Dispositivo gráfico do jogo.</param>

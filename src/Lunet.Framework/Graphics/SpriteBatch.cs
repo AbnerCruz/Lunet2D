@@ -104,6 +104,22 @@ public sealed class SpriteBatch
     public void Draw(Texture2D texture, Vector2 position, Color color) =>
         Draw(texture, new RectangleF(position.X, position.Y, texture.Width, texture.Height), null, color, 0f, Vector2.Zero);
 
+    /// <summary>Desenha a textura inteira no retângulo de destino, sem rotação.</summary>
+    /// <param name="texture">Textura a desenhar.</param>
+    /// <param name="destination">Retângulo de destino, em coordenadas virtuais.</param>
+    /// <param name="color">Cor de tinta.</param>
+    /// <remarks>Para preservar chamadas anteriores com default ou new sem tipo, informe RectangleF explicitamente ou use destination:.</remarks>
+    [System.Runtime.CompilerServices.OverloadResolutionPriority(-1)]
+    public void Draw(Texture2D texture, RectangleF destination, Color color) =>
+        Draw(texture, destination, null, color, 0f, Vector2.Zero);
+
+    /// <summary>Desenha um retângulo preenchido com a textura branca compartilhada.</summary>
+    /// <param name="rectangle">Retângulo em coordenadas virtuais.</param>
+    /// <param name="color">Cor do preenchimento.</param>
+    [System.Runtime.CompilerServices.OverloadResolutionPriority(-1)]
+    public void Draw(RectangleF rectangle, Color color) =>
+        Draw(GraphicsDevice.WhiteTexture, rectangle, color);
+
     /// <summary>Desenha um recorte (<paramref name="source"/>, em pixels) na posição dada, sem escala.</summary>
     /// <param name="texture">Textura a desenhar.</param>
     /// <param name="position">Posição, em coordenadas virtuais.</param>
