@@ -59,7 +59,7 @@ public sealed class CollisionDemo : Game
         batch.Begin();
         batch.Rect(new RectangleF(100, 180, 160, 160), Color.Yellow, 3);
         batch.Rect(new RectangleF(desired.X, desired.Y, 32, 32), Color.Red, 2);
-        batch.FillRect(new RectangleF(position.X, position.Y, 32, 32), Color.Green);
+        batch.Draw(new RectangleF(position, new Vector2(32, 32)), Color.Green);
         batch.Line(desired, position, Color.White, 2);
         batch.DrawString(font, $"Separacao: {push.Length():F1}", new Vector2(10, 20), Color.White);
         batch.End();

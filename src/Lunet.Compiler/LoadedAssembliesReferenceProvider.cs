@@ -17,7 +17,7 @@ public sealed unsafe class LoadedAssembliesReferenceProvider : IReferenceProvide
         "System.Numerics.Vectors", "System.Runtime.Numerics", "System.Memory", "System.Console",
         "System.Text.Json", "System.Threading", "System.Diagnostics.Debug", "System.Runtime.Extensions",
         "System.Collections.Concurrent", "System.Text.RegularExpressions", "System.Runtime.InteropServices",
-        "netstandard", "Lunet.Networking",
+        "netstandard", "Lunet.Networking", "System.Drawing.Primitives",
     ];
 
     private readonly Assembly[] _extra;
@@ -45,6 +45,9 @@ public sealed unsafe class LoadedAssembliesReferenceProvider : IReferenceProvide
             if (simple is not null && (simple.StartsWith("System.", StringComparison.Ordinal) || simple == "netstandard"))
                 byName.TryAdd(simple, assembly);
         }
+        // Referência estática aos tipos primitivos; não requer System.Drawing.Common.
+        var drawingPrimitives = typeof(System.Drawing.Size).Assembly;
+        byName[drawingPrimitives.GetName().Name!] = drawingPrimitives;
         foreach (var assembly in _extra)
             byName[assembly.GetName().Name ?? assembly.FullName ?? "extra"] = assembly;
 

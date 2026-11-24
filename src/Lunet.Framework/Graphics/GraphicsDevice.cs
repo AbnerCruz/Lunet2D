@@ -109,6 +109,11 @@ public sealed class GraphicsDevice
         Recompute();
     }
 
+    /// <summary>Troca a resolução virtual usando dimensões inteiras agrupadas.</summary>
+    /// <param name="size">Largura e altura virtuais.</param>
+    public void SetVirtualResolution(System.Drawing.Size size) =>
+        SetVirtualResolution(size.Width, size.Height);
+
     /// <summary>Informa o tamanho real da superfície em pixels e ajusta o viewport.</summary>
     /// <param name="surfaceWidth">Largura da superfície de desenho, em pixels.</param>
     /// <param name="surfaceHeight">Altura da superfície de desenho, em pixels.</param>

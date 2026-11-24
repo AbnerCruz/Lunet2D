@@ -34,7 +34,7 @@ public static partial class DebugDraw
     /// <param name="rect">Retângulo.</param>
     /// <param name="color">Cor.</param>
     public static void FillRect(this SpriteBatch batch, RectangleF rect, Color color) =>
-        batch.Draw(batch.GraphicsDevice.WhiteTexture, rect, null, color, 0f, Vector2.Zero);
+        batch.Draw(rect, color);
 
     /// <summary>Desenha o contorno de um retângulo.</summary>
     /// <param name="batch">Lote em uso.</param>

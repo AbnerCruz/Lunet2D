@@ -8,6 +8,33 @@ batch.Draw(textura, new Vector2(100, 100), Color.White);
 batch.End();
 ```
 
+## Retângulos e texturas
+
+`batch.Draw(rectangle, color)` preenche a área usando o pixel branco compartilhado do dispositivo; não cria uma textura por personagem. `batch.Rect(rectangle, color)` continua desenhando apenas o contorno. `batch.FillRect` permanece compatível.
+
+```csharp
+Vector2 position = new(100, 100);
+Vector2 size = new(32, 64);
+RectangleF rectangle = new(position, size);
+batch.Begin();
+batch.Draw(rectangle, Color.Red);
+batch.Draw(textura, destination: rectangle, color: Color.White);
+batch.End();
+```
+
+Para a sobrecarga de destino, use um `RectangleF` tipado ou o argumento nomeado `destination:`. Chamadas antigas com `default` ou `new(...)` sem tipo mantêm a prioridade da posição. Ambas as formas de desenho usam o mesmo lote, câmera, recorte e estados gráficos.
+
+Para dimensões discretas, use `using Size = System.Drawing.Size;` em vez de importar todo `System.Drawing` (evita conflitos com Color e RectangleF). Exemplo:
+
+```csharp
+var pixels = new Size(32, 64);
+using var solid = Texture2D.CreateSolid(device, pixels, Color.Red);
+using var target = new RenderTarget2D(device, pixels, TextureFilter.Point);
+device.SetVirtualResolution(new Size(360, 640));
+```
+
+As texturas têm dimensões reais; não são redimensionadas implicitamente. `Vector2` continua sendo usado para geometria fracionária. `Size` não valida valores por si só: as operações receptoras mantêm suas validações existentes. `System.Drawing.Point` pode representar coordenadas inteiras; `GridPoint` continua representando células.
+
 ## Peças principais
 
 - `Texture2D`: imagem na memória da GPU.

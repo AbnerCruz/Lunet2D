@@ -34,6 +34,14 @@ public sealed class RenderTarget2D : IDisposable
         Height = height;
     }
 
+    /// <summary>Cria um alvo de desenho com dimensões inteiras agrupadas.</summary>
+    /// <param name="device">Dispositivo gráfico.</param>
+    /// <param name="size">Largura e altura em pixels (1 a 4096).</param>
+    /// <param name="filter">Filtro da textura resultante.</param>
+    [System.Runtime.CompilerServices.OverloadResolutionPriority(-1)]
+    public RenderTarget2D(GraphicsDevice device, System.Drawing.Size size, TextureFilter filter = TextureFilter.Linear)
+        : this(device, size.Width, size.Height, filter) { }
+
     internal int Handle { get; }
 
     /// <summary>Conteúdo desenhado, para usar com <see cref="SpriteBatch"/>.</summary>
